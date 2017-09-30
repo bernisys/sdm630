@@ -4,3 +4,6 @@ read-out tool
 prerequisites:
  * perl >= 5.10
  * Device::Modbus::TCP::Client
+   * Device::Modbus
+   * Net::Server
+   * Role::Tiny
