@@ -25,38 +25,10 @@ retrieve($ref_client, 0, 3, ["Voltage", "Current", "Power_W", "Power_VA", "Power
 retrieve($ref_client, 21, 1, ["Voltage_avg", "_23", "Current_avg", "Current_sum", "_26", "Power_W_sum", "_28", "Power_VA_sum", "_30", "Power_Var_sum", "PF_sum", "_33", "phi_sum", "_35", "Frequency_Hz", "Energy_kWh_in", "Energy_kWh_out", "Energy_kVarh_in", "Energy_kVarh_out", "Energy_kVAh", "Charge_Ah", "Power_W_demand_tot", "Power_W_demand_max", ], $ref_values);
 output_values($ref_values);
 
-exit 0;
- 
-foreach my $item (sort keys %{$ref_values->{'linear'}})
-{
-  if ($item =~ /_L(\d)$/)
-  {
-    my $num = $1;
-    (my $legend = $item) =~ s/_L\d$//;
-    if ($num == 1)
-    {
-      printf("%-20s %9.2f", $legend, $ref_values->{'linear'}{$item});
-    }
-    else
-    {
-      printf("  %9.2f", $ref_values->{'linear'}{$item});
-    }
-    if ($num == 3)
-    {
-      print "\n";
-    }
-  }
-  else
-  {
-    printf("%-20s %9.2f\n", $item, $ref_values->{'linear'}{$item});
-  }
-}
-
-
 print Dumper($ref_values);
-
 exit 0;
- 
+
+
 sub retrieve {
   my $ref_client = shift;
   my $start = shift;
@@ -136,3 +108,4 @@ sub output_values {
   }
   printf("%-20s %s\n", $path, $string);
 }
+
