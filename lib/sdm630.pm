@@ -162,6 +162,50 @@ sub create_all_rrds {
 }
 
 
+sub feed_rrds {
+  my $ref_values = shift;
+  my $path = shift || '';
+
+  my %values = ();
+  foreach my $key (sort keys %{$ref_values})
+  {
+    if (ref $ref_values->{$key} eq 'HASH')
+    {
+      feed_rrds($ref_values->{$key}, $path.'_'.lc($key));
+    }
+    else
+    {
+      $values{$key} = $ref_values->{$key};
+    }
+  }
+  if (keys %values)
+  {
+
+    my $update_pattern = '';
+    my $update_values = '';
+    foreach my $key (sort keys %values)
+    {
+      $update_pattern .= ':'.$key;
+      $update_values .= ':'.$values{$key};
+    }
+
+    $path =~ s/^_//;
+    $path = 'rrd/'.$path.'.rrd';
+    $update_pattern =~ s/^://;
+    $update_values =~ s/^://;
+    print "updating $path with: $update_pattern / $update_values";
+    print "\n";
+
+    RRDs::update($path, '--template', $update_pattern, $update_values);
+    my $error = RRDs::error();
+    if ($error) {
+      warn("RRDs error: $error\n");
+    }
+  }
+}
+
+
+
 sub create_rrd {
   my $ref_params = shift;
 
