@@ -13,7 +13,7 @@ $Data::Dumper::Sortkeys = 1;
 $Data::Dumper::Indent = 1;
  
 use Device::Modbus::TCP::Client;
-
+use RRDs;
 
 my %RRD_PARAMS = (
   'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], },
@@ -193,10 +193,9 @@ sub feed_rrds {
     $path = 'rrd/'.$path.'.rrd';
     $update_pattern =~ s/^://;
     $update_values =~ s/^://;
-    print "updating $path with: $update_pattern / $update_values";
-    print "\n";
+    #print "updating $path with: $update_pattern / $update_values\n";
 
-    RRDs::update($path, '--template', $update_pattern, $update_values);
+    RRDs::update($path, '--template', $update_pattern, "N:".$update_values);
     my $error = RRDs::error();
     if ($error) {
       warn("RRDs error: $error\n");
