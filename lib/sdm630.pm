@@ -127,7 +127,7 @@ sub output_values {
       $string .= sprintf('%5s: %9.2f   ', $key, $ref_values->{$key});
     }
   }
-  printf("%-20s %s\n", $path, $string);
+  printf("%-20s %s\n", $path, $string) if ($string ne '');
 }
 
 
