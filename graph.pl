@@ -52,11 +52,24 @@ my %graphs = (
     },
     'frequency' => {
       'unit' => 'Hz', 'title' => 'Frequency',
+      'min' => 49.5, 'max' => 50.5,
       'graphs' => [
         { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE2' },
       ],
       'lines' => [
-        { 'height' => 50, 'color' => '0000ff' },
+        { 'height' => 51.5,  'color' => '0000a0:solar power total disablement\n' },
+        { 'height' => 50.2,  'color' => 'e0e000:frequency control range\n' },
+        { 'height' => 50.18, 'color' => '00a000:normal range\n' },
+        { 'height' => 50.02, 'color' => '00ff00:no frequency control necessary\n' },
+        { 'height' => 50,    'color' => '0000ff' },
+        { 'height' => 49.98, 'color' => '00ff00' },
+        { 'height' => 49.82, 'color' => '00a000' },
+        { 'height' => 49.8,  'color' => 'e0e000' },
+        { 'height' => 49.0,  'color' => 'a04000' },
+        { 'height' => 48.7,  'color' => 'd0d0d0' },
+        { 'height' => 48.4,  'color' => 'a0a0a0' },
+        { 'height' => 48.1,  'color' => '707070' },
+        { 'height' => 47.5,  'color' => '000000' },
       ],
     },
     'power_w' => {
@@ -177,6 +190,9 @@ foreach my $diagram (sort keys %{$graphs{'diagrams'}})
       '--font', 'TITLE:13',
       '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
       );
+
+    push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
+    push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
 
     my @graph = ( 'TEXTALIGN:left', 'COMMENT:                 Minimum   Average   Maximum\n');
 
