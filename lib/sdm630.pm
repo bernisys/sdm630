@@ -42,11 +42,11 @@ sub retrieve {
   for (my $index = 0; $index < $count ; $index++)
   {
     my $b32 = ($ref_values->[2*$index])*65536 + $ref_values->[2*$index+1];
-    my $hex = sprintf("%x", $b32);
-    my $float = unpack("f", reverse pack("H*", $hex));
+    my $hex = sprintf('%x', $b32);
+    my $float = unpack('f', reverse pack('H*', $hex));
     $float = 0 if !defined $float;
 
-    my $item = $ref_prefixes->[int($index/$grouping)].(($grouping > 1) ? "_L".(($index % $grouping) + 1) : "");
+    my $item = $ref_prefixes->[int($index/$grouping)].(($grouping > 1) ? '_L'.(($index % $grouping) + 1) : '');
     next if $item =~ /^_/;
 
     my @subitems = split(/_/, $item);
@@ -89,16 +89,16 @@ sub output_values {
   my $ref_values = shift;
   my $path = shift || '';
 
-  my $string = "";
+  my $string = '';
   foreach my $key (sort keys %{$ref_values})
   {
-    if (ref $ref_values->{$key} eq "HASH")
+    if (ref $ref_values->{$key} eq 'HASH')
     {
       output_values($ref_values->{$key}, $path.' '.$key);
     }
     else
     {
-      $string .= sprintf("%5s: %9.2f   ", $key, $ref_values->{$key});
+      $string .= sprintf('%5s: %9.2f   ', $key, $ref_values->{$key});
     }
   }
   printf("%-20s %s\n", $path, $string);
