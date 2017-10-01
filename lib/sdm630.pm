@@ -131,4 +131,62 @@ sub create_all_rrds {
 }
 
 
+sub create_rrd {
+  my $ref_params = shift;
+
+  my $base_step = $ref_params->{'step'};
+  my $type = $ref_params->{'type'};
+  my $ref_rows = $ref_params->{'rows'};
+  my $ref_resolutions = $ref_params->{'resolutions'};
+
+  my @rows;
+  foreach my $row (@{$ref_rows})
+  {
+    my ($name, $min, $max) = split(/:/, $row);
+    push @rows, sprintf('DS:%s:%s:%d:%s:%s', $name, $type, 6*$base_step, $min, $max);
+  }
+
+  my @resolutions;
+  my $count = 0;
+  foreach my $resolution (@{$ref_resolutions})
+  {
+    my ($span, $step) = split(/@/, $resolution);
+    my $step_seconds = time_to_seconds($step);
+    my $span_seconds = time_to_seconds($span);
+    my $factor = 0.3;
+    my $num_steps = $span_seconds/$step_seconds;
+    my $num_base_steps = $step_seconds/$base_step;
+    #printf("Span: %5s %9ds Step: %5s %9ds = %9d\n", $span, $span_seconds, $step, $step_seconds, $num_steps);
+
+    foreach my $consolidation ('AVERAGE', 'MIN', 'MAX')
+    {
+      push @resolutions, sprintf('RRA:%s:%s:%d:%s', $consolidation, $factor, $num_base_steps, $num_steps);
+      last if ($count == 0);
+    }
+    $count++;
+  }
+
+  my $name = $ref_params->{'name'};
+  if (! -f 'rrd/'.$name.'.rrd')
+  {
+    RRDs::create('rrd/'.$name.'.rrd', '--step', $base_step, @rows, @resolutions);
+    my $error = RRDs::error();
+   if ($error) {
+      warn("RRDs error: $error\n");
+    }
+  }
+}
+
+
+sub time_to_seconds {
+  my $timestring = shift;
+
+  my %factors = ( 'S' => 1, 'M' => 60, 'H' => 3600, 'd' => 86400, 'w' => 86400*7, 'm' => 86400*31, 'y' => 86400*366, );
+
+  $timestring =~ /^(\d+)(\w)$/;
+  my ($num, $unit) = ($1, $2);
+  return 0 if (!exists $factors{$unit});
+  return $num * $factors{$unit};
+}
+
 1;
