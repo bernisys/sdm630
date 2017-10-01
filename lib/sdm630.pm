@@ -15,6 +15,21 @@ $Data::Dumper::Indent = 1;
 use Device::Modbus::TCP::Client;
 
 
+my %RRD_PARAMS = (
+  'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], },
+  'current'        => { 'type' => 'GAUGE',   'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
+  'energy'         => { 'type' => 'GAUGE',   'rows' => ['kVAh:0:U', ], },
+  'energy_kvarh'   => { 'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
+  'energy_kwh'     => { 'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
+  'frequency'      => { 'type' => 'GAUGE',   'rows' => ['Hz:45:55', ], },
+  'phi'            => { 'type' => 'GAUGE',   'rows' => ['L1:-180:180', 'L2:-180:180', 'L3:-180:180', 'sum:-180:180', ], },
+  'power_va'       => { 'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
+  'power_var'      => { 'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
+  'power_w'        => { 'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
+  'power_w_demand' => { 'type' => 'GAUGE',   'rows' => ['max:0:60000', 'tot:0:60000', ], },
+  'powerfactor'    => { 'type' => 'GAUGE',   'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
+  'voltage'        => { 'type' => 'GAUGE',   'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
+);
 
 
 sub retrieve_all {
@@ -136,24 +151,10 @@ sub output_values {
 
 
 sub create_all_rrds {
-  my @params = (
-    { 'name' => 'charge',         'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], },
-    { 'name' => 'current',        'type' => 'GAUGE',   'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
-    { 'name' => 'energy_kvah',    'type' => 'GAUGE',   'rows' => ['kVAh:0:U', ], },
-    { 'name' => 'energy_kvarh',   'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
-    { 'name' => 'energy_kwh',     'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
-    { 'name' => 'frequency',      'type' => 'GAUGE',   'rows' => ['Hz:45:55', ], },
-    { 'name' => 'phi',            'type' => 'GAUGE',   'rows' => ['L1:-180:180', 'L2:-180:180', 'L3:-180:180', 'sum:-180:180', ], },
-    { 'name' => 'power_va',       'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
-    { 'name' => 'power_var',      'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
-    { 'name' => 'power_w',        'type' => 'GAUGE',   'rows' => ['L1:0:20000', 'L2:0:20000', 'L3:0:20000', 'sum:0:60000', ], },
-    { 'name' => 'power_w_demand', 'type' => 'GAUGE',   'rows' => ['max:0:60000', 'tot:0:60000', ], },
-    { 'name' => 'powerfactor',    'type' => 'GAUGE',   'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
-    { 'name' => 'voltage',        'type' => 'GAUGE',   'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
-  );
-
-  foreach my $ref_param (@params)
+  foreach my $key (keys %RRD_PARAMS)
   {
+    my $ref_param = $RRD_PARAMS{$key};
+    $ref_param->{'name'} = $key;
     $ref_param->{'step'} = 10;
     $ref_param->{'resolutions'} = ['2H@10S', '2d@1M', '2w@10M', '2m@1H', '2y@12H', ];
     create_rrd($ref_param);
@@ -201,7 +202,7 @@ sub create_rrd {
   {
     RRDs::create('rrd/'.$name.'.rrd', '--step', $base_step, @rows, @resolutions);
     my $error = RRDs::error();
-   if ($error) {
+    if ($error) {
       warn("RRDs error: $error\n");
     }
   }
