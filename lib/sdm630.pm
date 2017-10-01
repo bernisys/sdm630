@@ -15,26 +15,6 @@ $Data::Dumper::Indent = 1;
 use Device::Modbus::TCP::Client;
 
 
-my $VAR1 = {
-  'Charge'      => { 'Ah' => '1251.346' },
-  'Frequency'   => { 'Hz' => '50.035' },
-  'Current'     => { 'L1' =>   '0.224', 'L2' =>   '1.092', 'L3' => '  2.101', 'avg' =>   '1.183', 'sum' => '3.551' },
-  'PowerFactor' => { 'L1' =>   '0.828', 'L2' =>   '0.758', 'L3' =>   '0.904', 'sum' =>   '0.859' },
-  'Voltage'     => { 'L1' => '229.636', 'L2' => '229.168', 'L3' => '230.414', 'avg' => '229.739' },
-  'phi'         => { 'L1' =>  '34.056', 'L2' =>  '40.713', 'L3' =>  '25.183', 'sum' =>  '30.707' },
-  'Power'       => {
-    'VA'        => { 'L1' => '51.646', 'L2' => '250.296', 'L3' => '484.298', 'sum' => '786.152' },
-    'Var'       => { 'L1' => '29.668', 'L2' => '163.387', 'L3' => '205.682', 'sum' => '398.290' },
-    'W'         => { 'L1' => '42.274', 'L2' => '189.613', 'L3' => '438.283', 'sum' => '670.661',
-      'demand'  => { 'max' => '7082.617', 'tot' => '670.171' },
-    },
-  },
-  'Energy'      => {
-    'kVAh'      => '298.806',
-    'kVarh'     => { 'in' =>  '95.153', 'out' =>  '24.565' },
-    'kWh'       => { 'in' => '131.457', 'out' => '142.317' },
-  },
-};
 
 
 sub retrieve_all {
@@ -47,6 +27,30 @@ sub retrieve_all {
   # then add all single values
   SDM630::retrieve($ref_client, 21, 1, ['Voltage_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30', 'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_in', 'Energy_kWh_out', 'Energy_kVarh_in', 'Energy_kVarh_out', 'Energy_kVAh', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max', ], $ref_values);
   return $ref_values;
+}
+
+
+sub retrieve_all_dummy {
+  return {
+    'Charge'      => { 'Ah' => '1251.346' },
+    'Frequency'   => { 'Hz' => '50.035' },
+    'Current'     => { 'L1' =>   '0.224', 'L2' =>   '1.092', 'L3' => '  2.101', 'avg' =>   '1.183', 'sum' => '3.551' },
+    'PowerFactor' => { 'L1' =>   '0.828', 'L2' =>   '0.758', 'L3' =>   '0.904', 'sum' =>   '0.859' },
+    'Voltage'     => { 'L1' => '229.636', 'L2' => '229.168', 'L3' => '230.414', 'avg' => '229.739' },
+    'phi'         => { 'L1' =>  '34.056', 'L2' =>  '40.713', 'L3' =>  '25.183', 'sum' =>  '30.707' },
+    'Power'       => {
+      'VA'        => { 'L1' => '51.646', 'L2' => '250.296', 'L3' => '484.298', 'sum' => '786.152' },
+      'Var'       => { 'L1' => '29.668', 'L2' => '163.387', 'L3' => '205.682', 'sum' => '398.290' },
+      'W'         => { 'L1' => '42.274', 'L2' => '189.613', 'L3' => '438.283', 'sum' => '670.661',
+        'demand'  => { 'max' => '7082.617', 'tot' => '670.171' },
+      },
+    },
+    'Energy'      => {
+      'kVAh'      => '298.806',
+      'kVarh'     => { 'in' =>  '95.153', 'out' =>  '24.565' },
+      'kWh'       => { 'in' => '131.457', 'out' => '142.317' },
+    },
+  };
 }
 
 
