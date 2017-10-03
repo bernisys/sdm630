@@ -4,6 +4,12 @@ use strict;
 use warnings;
 use diagnostics;
 
+$| = 1;
+
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
+$Data::Dumper::Indent = 1;
+
 use RRDs;
 
 my $OUTPUT='/home/user/berni/public_html/powermeter';
@@ -13,25 +19,26 @@ my %graphs = (
     'width' => 600,
     'height' => 200,
   },
-  'times' => [
-    { 'name' => 'hour',   'start' => -3600,      'step' =>    10, 'func' => ['AVG'] },
-    { 'name' => '6h',     'start' => -6*3600,    'step' =>    10, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'day',    'start' => -86400,     'step' =>    60, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'week',   'start' => -7*86400,   'step' =>   600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'month',  'start' => -31*86400,  'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => '3month', 'start' => -93*86400,  'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => '6month', 'start' => -186*86400, 'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'year',   'start' => -366*86400, 'step' => 43200, 'func' => ['MAX', 'MIN', 'AVG'] },
-  ],
-  'consolidation' => [
-    { 'name' => 'cur', 'function' => 'LAST' },
-    { 'name' => 'min', 'function' => 'MINIMUM' },
-    { 'name' => 'avg', 'function' => 'AVERAGE' },
-    { 'name' => 'max', 'function' => 'MAXIMUM' },
-  ],
+  'times' => {
+    'hour'    => { 'start' => -3600,      'step' =>    10, 'func' => ['avg'] },
+    '6h'      => { 'start' => -6*3600,    'step' =>    10, 'func' => ['max', 'min', 'avg'] },
+    'day'     => { 'start' => -86400,     'step' =>    60, 'func' => ['max', 'min', 'avg'] },
+    'week'    => { 'start' => -7*86400,   'step' =>   600, 'func' => ['max', 'min', 'avg'] },
+    'month'   => { 'start' => -31*86400,  'step' =>  3600, 'func' => ['max', 'min', 'avg'] },
+    '3month'  => { 'start' => -93*86400,  'step' =>  3600, 'func' => ['max', 'min', 'avg'] },
+    '6month'  => { 'start' => -186*86400, 'step' =>  3600, 'func' => ['max', 'min', 'avg'] },
+    'year'    => { 'start' => -366*86400, 'step' => 43200, 'func' => ['max', 'min', 'avg'] },
+  },
+  'consolidation' => {
+    'cur' => 'LAST',
+    'min' => 'MINIMUM',
+    'avg' => 'AVERAGE',
+    'max' => 'MAXIMUM',
+  },
   'diagrams' => {
     'voltage' => {
       'unit' => 'V', 'title' => 'Voltage',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -44,6 +51,7 @@ my %graphs = (
     },
     'current' => {
       'unit' => 'A', 'title' => 'Current',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -55,6 +63,7 @@ my %graphs = (
     'frequency' => {
       'unit' => 'Hz', 'title' => 'Frequency',
       'min' => 49.5, 'max' => 50.5,
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE2' },
       ],
@@ -76,6 +85,7 @@ my %graphs = (
     },
     'power_w' => {
       'unit' => 'W', 'title' => 'Power',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -88,6 +98,7 @@ my %graphs = (
     },
     'power_w_demand' => {
       'unit' => 'W', 'title' => 'Power Demand',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2' },
         { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE2' },
@@ -98,6 +109,7 @@ my %graphs = (
     },
     'power_var' => {
       'unit' => 'Var', 'title' => 'Reactive Power',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -110,6 +122,7 @@ my %graphs = (
     },
     'power_va' => {
       'unit' => 'VA', 'title' => 'Apparent Power',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -122,6 +135,7 @@ my %graphs = (
     },
     'powerfactor' => {
       'unit' => '', 'title' => 'Power Factor',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -134,6 +148,7 @@ my %graphs = (
     },
     'phi' => {
       'unit' => '°', 'title' => 'Phase Angle',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2' },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2' },
@@ -146,12 +161,14 @@ my %graphs = (
     },
     'energy' => {
       'unit' => 'kVAh', 'title' => 'Apparent Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year'],
       'graphs' => [
         { 'row' => 'kVAh',  'color' => '000000', 'style' => 'LINE2' },
       ],
     },
     'energy_kwh' => {
       'unit' => 'kWh', 'title' => 'Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year'],
       'graphs' => [
         { 'row' => 'in',  'color' => 'a00000', 'style' => 'LINE2' },
         { 'row' => 'out', 'color' => '00a000', 'style' => 'LINE2' },
@@ -159,6 +176,7 @@ my %graphs = (
     },
     'energy_kvarh' => {
       'unit' => 'kVarh', 'title' => 'Reactive Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year'],
       'graphs' => [
         { 'row' => 'in',  'color' => 'a00000', 'style' => 'LINE2' },
         { 'row' => 'out', 'color' => '00a000', 'style' => 'LINE2' },
@@ -168,78 +186,82 @@ my %graphs = (
 );
 
 
+generate_diagrams(\%graphs);
+
+exit 0;
+
+
+
 sub generate_diagrams {
   my $ref_graphs = shift;
 
-}
+  my $maxlen_diagram = length((sort { length($b) <=> length($a) } (keys %{$ref_graphs->{'diagrams'}}))[0]);
+  my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$ref_graphs->{'times'}}))[0]);
 
-
-my $maxlen_diagram = length((sort { length($b) <=> length($a) } (keys %{$graphs{'diagrams'}}))[0]);
-my $maxlen_timespan = length((sort { length($b->{'name'}) <=> length($a->{'name'}) } (@{$graphs{'times'}}))[0]->{'name'});
-
-foreach my $diagram (sort keys %{$graphs{'diagrams'}})
-{
-  printf('%-'.$maxlen_diagram.'s  ', $diagram);
-
-  my $ref_diagram = $graphs{'diagrams'}{$diagram};
-
-  foreach my $ref_timespan (@{$graphs{'times'}})
+  foreach my $diagram (sort keys %{$ref_graphs->{'diagrams'}})
   {
-    my $timespan = $ref_timespan->{'name'};
-    my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
+    printf('%-'.$maxlen_diagram.'s  ', $diagram);
 
-    my @params = (
-      $OUTPUT.'/'.$diagram.'-'.$timespan.'.tmp.png',
-      '--start', $ref_timespan->{'start'},
-      '--width', $graphs{'base'}{'width'},
-      '--height', $graphs{'base'}{'height'},
-      '--lazy',
-      '--alt-autoscale',
-      '--font', 'TITLE:13',
-      '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
+    my $ref_diagram = $ref_graphs->{'diagrams'}{$diagram};
+
+    foreach my $timespan (@{$ref_diagram->{'times'}})
+    {
+      my $ref_timespan = $ref_graphs->{'times'}{$timespan};
+      my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
+
+      my @params = (
+        $OUTPUT.'/'.$diagram.'-'.$timespan.'.tmp.png',
+        '--start', $ref_timespan->{'start'},
+        '--width', $ref_graphs->{'base'}{'width'},
+        '--height', $ref_graphs->{'base'}{'height'},
+        '--lazy',
+        '--alt-autoscale',
+        '--font', 'TITLE:13',
+        '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
       );
 
-    push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
-    push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
+      push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
+      push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
 
-    my @graph = ( 'TEXTALIGN:left', 'COMMENT:                 Minimum   Average   Maximum\n');
+      my @graph = ( 'TEXTALIGN:left', 'COMMENT:                 Minimum   Average   Maximum\n');
 
-    my @def;
-    my @lines;
-    foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
-    {
-      my $row = $ref_graph->{'row'};
-      push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row, $diagram, $row, 'AVERAGE');
-      #
-      # TODO: add definition for min/max values
-      #
-      push @graph, 'LINE2:'.$row.'#'.$ref_graph->{'color'}.':'.$row;
-      for my $consol (@{$graphs{'consolidation'}})
+      my @def;
+      my @vdef;
+      my @lines;
+      foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
-        my $name = $consol->{'name'};
-        push @def, sprintf('VDEF:%s=%s,%s', $row.'_'.$name, $row, $consol->{'function'});
-        push @graph, sprintf('GPRINT:%s:%s', $row.'_'.$name, '%6.2lf%S');
+        my $row = $ref_graph->{'row'};
+        my @gprint;
+        for my $consol (@{$ref_timespan->{'func'}})
+        {
+          my $function = $ref_graphs->{'consolidation'}{$consol};
+          push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row.'_'.$consol, $diagram, $row, 'AVERAGE');
+          push @vdef, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol.$consol, $row.'_'.$consol, $function);
+          push @gprint, sprintf('GPRINT:%s:%s', $row.'_'.$consol.$consol, '%6.2lf%S');
+        }
+        push @graph, 'LINE2:'.$row.'_avg#'.$ref_graph->{'color'}.':'.$row;
+        push @graph, @gprint, 'COMMENT:\n';
       }
-      push @graph, 'COMMENT:\n';
-    }
-    foreach my $ref_line (@{$ref_diagram->{'lines'}})
-    {
-      push @lines, 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
-    }
+      foreach my $ref_line (@{$ref_diagram->{'lines'}})
+      {
+        push @lines, 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
+      }
 
-    my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @graph, @lines);
-    my $error = RRDs::error();
-    if ($error)
-    {
-      warn $error;
+      print join("\n", @def, @vdef, @graph);
+      my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
+      my $error = RRDs::error();
+      if ($error)
+      {
+        warn $error;
+      }
+      else
+      {
+        chmod 0644, $basename.'.tmp.png';
+        rename $basename.'.tmp.png', $basename.'.png';
+        printf('%'.$maxlen_timespan.'s = %8dx%4d  ', $timespan, $xsize, $ysize);
+      }
     }
-    else
-    {
-      chmod 0644, $basename.'.tmp.png';
-      rename $basename.'.tmp.png', $basename.'.png';
-      printf('%'.$maxlen_timespan.'s = %8dx%4d  ', $timespan, $xsize, $ysize);
-    }
+    print "\n";
   }
-  print "\n";
 }
 
