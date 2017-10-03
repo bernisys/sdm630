@@ -14,18 +14,20 @@ my %graphs = (
     'height' => 200,
   },
   'times' => [
-    { 'name' => 'hour',  'start' => -3600,      'step' =>    10, 'func' => ['AVG'] },
-    { 'name' => '6h',    'start' => -6*3600,    'step' =>    10, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'day',   'start' => -86400,     'step' =>    60, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'week',  'start' => -7*86400,   'step' =>   600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'month', 'start' => -31*86400,  'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
-    { 'name' => 'year',  'start' => -366*86400, 'step' => 43200, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => 'hour',   'start' => -3600,      'step' =>    10, 'func' => ['AVG'] },
+    { 'name' => '6h',     'start' => -6*3600,    'step' =>    10, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => 'day',    'start' => -86400,     'step' =>    60, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => 'week',   'start' => -7*86400,   'step' =>   600, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => 'month',  'start' => -31*86400,  'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => '3month', 'start' => -93*86400,  'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => '6month', 'start' => -186*86400, 'step' =>  3600, 'func' => ['MAX', 'MIN', 'AVG'] },
+    { 'name' => 'year',   'start' => -366*86400, 'step' => 43200, 'func' => ['MAX', 'MIN', 'AVG'] },
   ],
   'consolidation' => [
-    ['cur', 'LAST'],
-    ['min', 'MINIMUM'],
-    ['avg', 'AVERAGE'],
-    ['max', 'MAXIMUM'],
+    { 'name' => 'cur', 'function' => 'LAST' },
+    { 'name' => 'min', 'function' => 'MINIMUM' },
+    { 'name' => 'avg', 'function' => 'AVERAGE' },
+    { 'name' => 'max', 'function' => 'MAXIMUM' },
   ],
   'diagrams' => {
     'voltage' => {
@@ -166,8 +168,14 @@ my %graphs = (
 );
 
 
+sub generate_diagrams {
+  my $ref_graphs = shift;
+
+}
+
+
 my $maxlen_diagram = length((sort { length($b) <=> length($a) } (keys %{$graphs{'diagrams'}}))[0]);
-my $maxlen_span = length((sort { length($b->{'name'}) <=> length($a->{'name'}) } (@{$graphs{'times'}}))[0]->{'name'});
+my $maxlen_timespan = length((sort { length($b->{'name'}) <=> length($a->{'name'}) } (@{$graphs{'times'}}))[0]->{'name'});
 
 foreach my $diagram (sort keys %{$graphs{'diagrams'}})
 {
@@ -175,14 +183,14 @@ foreach my $diagram (sort keys %{$graphs{'diagrams'}})
 
   my $ref_diagram = $graphs{'diagrams'}{$diagram};
 
-  foreach my $ref_span (@{$graphs{'times'}})
+  foreach my $ref_timespan (@{$graphs{'times'}})
   {
-    my $timespan = $ref_span->{'name'};
+    my $timespan = $ref_timespan->{'name'};
     my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
 
     my @params = (
       $OUTPUT.'/'.$diagram.'-'.$timespan.'.tmp.png',
-      '--start', $ref_span->{'start'},
+      '--start', $ref_timespan->{'start'},
       '--width', $graphs{'base'}{'width'},
       '--height', $graphs{'base'}{'height'},
       '--lazy',
@@ -202,11 +210,15 @@ foreach my $diagram (sort keys %{$graphs{'diagrams'}})
     {
       my $row = $ref_graph->{'row'};
       push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row, $diagram, $row, 'AVERAGE');
+      #
+      # TODO: add definition for min/max values
+      #
       push @graph, 'LINE2:'.$row.'#'.$ref_graph->{'color'}.':'.$row;
       for my $consol (@{$graphs{'consolidation'}})
       {
-        push @def, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol->[0], $row, $consol->[1]);
-        push @graph, sprintf('GPRINT:%s:%s', $row.'_'.$consol->[0], '%6.2lf%S');
+        my $name = $consol->{'name'};
+        push @def, sprintf('VDEF:%s=%s,%s', $row.'_'.$name, $row, $consol->{'function'});
+        push @graph, sprintf('GPRINT:%s:%s', $row.'_'.$name, '%6.2lf%S');
       }
       push @graph, 'COMMENT:\n';
     }
@@ -225,7 +237,7 @@ foreach my $diagram (sort keys %{$graphs{'diagrams'}})
     {
       chmod 0644, $basename.'.tmp.png';
       rename $basename.'.tmp.png', $basename.'.png';
-      printf('%'.$maxlen_span.'s = %4dx%4d  ', $timespan, $xsize, $ysize);
+      printf('%'.$maxlen_timespan.'s = %8dx%4d  ', $timespan, $xsize, $ysize);
     }
   }
   print "\n";
