@@ -156,7 +156,7 @@ sub create_all_rrds {
     my $ref_param = $RRD_PARAMS{$key};
     $ref_param->{'name'} = $key;
     $ref_param->{'step'} = 10;
-    $ref_param->{'resolutions'} = ['2H@10S', '2d@1M', '2w@10M', '2m@1H', '2y@12H', ];
+    $ref_param->{'resolutions'} = ['12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', ];
     create_rrd($ref_param);
   }
 }
