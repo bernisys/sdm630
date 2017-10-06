@@ -164,10 +164,10 @@ my %graphs = (
       'unit' => '°', 'title' => 'Phase Angle',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-180:180', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-180:180', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-180:180', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-180:180', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
