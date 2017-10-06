@@ -240,36 +240,49 @@ sub generate_diagrams {
       push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
       push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
 
-      my @graph = ( 'TEXTALIGN:left', 'COMMENT:                 Minimum   Average   Maximum\n');
 
       my @def;
       my @vdef;
-      my @lines;
+      my $maxlen_row = length((sort { length($b->{'row'}) <=> length($a->{'row'}) } (@{$ref_diagram->{'graphs'}}))[0]{'row'});
+      my @graph = ( 'TEXTALIGN:left', 'COMMENT:'.(' ' x $maxlen_row).'     Last    Minimum   Average   Maximum\n');
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
         my $row = $ref_graph->{'row'};
         my @gprint;
+        my $con = 0;
         for my $consol (@{$ref_timespan->{'func'}})
         {
           my $function = $ref_graphs->{'consolidation'}{$consol};
-          push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row.'_'.$consol, $diagram, $row, 'AVERAGE');
           push @vdef, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol.$consol, $row.'_'.$consol, $function);
+          $function ='MIN' if ($function eq "MINIMUM");
+          $function ='MAX' if ($function eq "MAXIMUM");
+          push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row.'_'.$consol, $diagram, $row, $function);
           push @gprint, sprintf('GPRINT:%s:%s', $row.'_'.$consol.$consol, '%6.2lf%S');
+          $con++ if (($consol eq "min") or ($consol eq "max"));
         }
-        push @graph, 'LINE2:'.$row.'_avg#'.$ref_graph->{'color'}.':'.$row;
+        if (($ref_graph->{'minmax'} eq 'yes') and ($con >= 2))
+        {
+          # min/max area: draw an invisible "*_min" and stack "*_max - *_min" onto it
+          push @def, sprintf('CDEF:%s_diff=%s_max,%s_min,-', $row, $row, $row);
+          push @graph, 'AREA:'.$row.'_min#ffffff';
+          push @graph, 'STACK:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7);
+        }
+        push @graph, sprintf('%s:%s_avg#%s:%-'.$maxlen_row.'s', $ref_graph->{'style'}, $row, $ref_graph->{'color'}, $row);
         push @graph, @gprint, 'COMMENT:\n';
       }
+
+      my @lines;
       foreach my $ref_line (@{$ref_diagram->{'lines'}})
       {
         push @lines, 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
 
-      print join("\n", @def, @vdef, @graph);
+      print join("\n", @def, @vdef, @graph, "", "");
       my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
       my $error = RRDs::error();
       if ($error)
       {
-        warn $error;
+        warn "ERROR: ".$error;
       }
       else
       {
@@ -282,3 +295,15 @@ sub generate_diagrams {
   }
 }
 
+
+sub brighten {
+  my $color = shift;
+  my $factor = shift;
+
+  $color =~ /([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
+  my ($r, $g, $b) = (hex($1), hex($2), hex($3));
+  print join(", ", $r, $g, $b),"\n";
+  $color = sprintf("%02x%02x%02x", ($r + (255-$r) * $factor ), ($g + (255-$g) * $factor), ($b + (255-$b) * $factor));
+
+  return $color;
+}
