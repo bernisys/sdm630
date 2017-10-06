@@ -14,6 +14,10 @@ use RRDs;
 
 my $OUTPUT='/home/user/berni/public_html/powermeter';
 
+# TODO:  find best brown value
+# CD853F - seems okay for now, could be slightly darker though
+# 720239 - a bit dark, hardly distinguishable from black in graphs
+#
 my %graphs = (
   'base' => {
     'width' => 600,
