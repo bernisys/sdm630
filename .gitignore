@@ -1,3 +1,6 @@
 rrd/
 *.swp
 *~
+.md5
+.stat
+.sha1
