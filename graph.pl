@@ -62,7 +62,7 @@ my %graphs = (
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
         { 'row' => 'avg', 'color' => 'ffff00', 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
       ],
@@ -97,7 +97,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
@@ -123,7 +123,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
@@ -137,7 +137,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
@@ -151,7 +151,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
       ],
@@ -165,7 +165,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => '720239', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
       ],
