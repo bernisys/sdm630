@@ -76,10 +76,10 @@ my %graphs = (
         { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE1', 'data_range' => '45:55', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 51.5,  'color' => '0000a0:solar power total disablement\n' },
-        { 'height' => 50.2,  'color' => 'e0e000:frequency control range\n' },
-        { 'height' => 50.18, 'color' => '00a000:normal range\n' },
-        { 'height' => 50.02, 'color' => '00ff00:no frequency control necessary\n' },
+        { 'height' => 51.5,  'color' => '0000a0', 'legend' => 'solar power total disablement\n' },
+        { 'height' => 50.2,  'color' => 'e0e000', 'legend' => 'frequency control range\n' },
+        { 'height' => 50.18, 'color' => '00a000', 'legend' => 'normal range\n' },
+        { 'height' => 50.02, 'color' => '00ff00', 'legend' => 'no frequency control necessary\n' },
         { 'height' => 50,    'color' => '0000ff' },
         { 'height' => 49.98, 'color' => '00ff00' },
         { 'height' => 49.82, 'color' => '00a000' },
@@ -265,7 +265,7 @@ sub generate_diagrams {
           # min/max area: draw an invisible "*_min" and stack "*_max - *_min" onto it
           push @def, sprintf('CDEF:%s_diff=%s_max,%s_min,-', $row, $row, $row);
           push @graph, 'AREA:'.$row.'_min#ffffff';
-          push @graph, 'STACK:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7);
+          push @graph, 'AREA:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7).'::STACK';
         }
         push @graph, sprintf('%s:%s_avg#%s:%-'.$maxlen_row.'s', $ref_graph->{'style'}, $row, $ref_graph->{'color'}, $row);
         push @graph, @gprint, 'COMMENT:\n';
@@ -274,7 +274,12 @@ sub generate_diagrams {
       my @lines;
       foreach my $ref_line (@{$ref_diagram->{'lines'}})
       {
-        push @lines, 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
+        my $line = sprintf('HRULE:%s#%s', $ref_line->{'height'}, $ref_line->{'color'});
+        if (exists $ref_line->{'legend'})
+        {
+          $line .= $ref_line->{'legend'};
+        }
+        push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
 
       print join("\n", @def, @vdef, @graph, "", "");
@@ -307,3 +312,74 @@ sub brighten {
 
   return $color;
 }
+
+
+#        rrdtool graph filename
+#                --start seconds
+#                --end seconds
+#                --step seconds
+#
+#                --title string
+#
+#                --width pixels
+#                --height pixels
+#
+#                --x-grid x-axis grid and label
+#                --y-grid y-axis grid and label
+#                --alt-y-grid
+#                --vertical-label string
+#                --force-rules-legend
+#                --right-axis scale:shift
+#                --right-axis-label label]
+#                --right-axis-format format
+#                --lazy
+#                --logarithmic
+#                --full-size-mode
+#                --only-graph
+#
+#                --upper-limit value
+#                --lower-limit value
+#                --alt-autoscale
+#                --alt-autoscale-max
+#                --rigid
+#                --no-legend
+#                --daemon <address>
+#
+#                --font FONTTAG:size:font
+#                --font-render-mode {normal,light,mono}
+#                --font-smoothing-threshold size
+#
+#                --zoom factor
+#
+#                --graph-render-mode {normal,mono}
+#                --tabwidth width
+#                --slope-mode
+#                --pango-markup
+#                --no-gridfit
+#                --units-exponent value
+#                --units-length value
+#                --imginfo printfstr
+#                --imgformat PNG
+#                --color COLORTAG#rrggbb[aa]
+#                --border width
+#                --watermark string
+#
+#                [DEF:vname=rrd:ds-name:CF]
+#                [CDEF:vname=rpn-expression]
+#
+#                [VDEF:vdefname=rpn-expression]
+#                [TEXTALIGN:{left|right|justified|center}]
+#                [PRINT:vdefname:format]
+#                [GPRINT:vdefname:format]
+#                [COMMENT:text]
+#
+#                [SHIFT:vname:offset]
+#                [TICK:vname#rrggbb[aa][:[fraction][:legend]]]
+#                [HRULE:value#rrggbb[aa][:legend]]
+#                [VRULE:value#rrggbb[aa][:legend]]
+#
+#                [LINE[width]:vname[#rrggbb[aa][:[legend][:STACK]]]]
+#                [AREA:vname[#rrggbb[aa][:[legend][:STACK]]]]
+#
+
+
