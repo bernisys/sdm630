@@ -16,19 +16,19 @@ use Device::Modbus::TCP::Client;
 use RRDs;
 
 my %RRD_PARAMS = (
-  'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], },
-  'current'        => { 'type' => 'GAUGE',   'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
-  'energy'         => { 'type' => 'GAUGE',   'rows' => ['kVAh:0:U', ], },
-  'energy_kvarh'   => { 'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
-  'energy_kwh'     => { 'type' => 'GAUGE',   'rows' => ['in:0:U', 'out:0:U', ], },
-  'frequency'      => { 'type' => 'GAUGE',   'rows' => ['Hz:45:55', ], },
-  'phi'            => { 'type' => 'GAUGE',   'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
-  'power_va'       => { 'type' => 'GAUGE',   'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_var'      => { 'type' => 'GAUGE',   'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_w'        => { 'type' => 'GAUGE',   'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_w_demand' => { 'type' => 'GAUGE',   'rows' => ['max:0:60000', 'tot:0:60000', ], },
-  'powerfactor'    => { 'type' => 'GAUGE',   'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
-  'voltage'        => { 'type' => 'GAUGE',   'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
+  'charge'         => { 'type' => 'GAUGE', 'rows' => ['Ah:0:U', ], },
+  'current'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
+  'energy'         => { 'type' => 'GAUGE', 'rows' => ['kVAh:0:U', ], },
+  'energy_kvarh'   => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
+  'energy_kwh'     => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
+  'frequency'      => { 'type' => 'GAUGE', 'rows' => ['Hz:45:55', ], },
+  'phi'            => { 'type' => 'GAUGE', 'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
+  'power_va'       => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_var'      => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_w'        => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_w_demand' => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
+  'powerfactor'    => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
+  'voltage'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
 );
 
 

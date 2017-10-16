@@ -277,7 +277,7 @@ sub generate_diagrams {
         my $line = sprintf('HRULE:%s#%s', $ref_line->{'height'}, $ref_line->{'color'});
         if (exists $ref_line->{'legend'})
         {
-          $line .= $ref_line->{'legend'};
+          $line .= ':'.$ref_line->{'legend'};
         }
         push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
