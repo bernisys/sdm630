@@ -203,7 +203,7 @@ my %graphs = (
 );
 
 
-generate_diagrams(\%graphs);
+generate_diagrams(\%graphs, @ARGV);
 
 exit 0;
 
@@ -211,11 +211,14 @@ exit 0;
 
 sub generate_diagrams {
   my $ref_graphs = shift;
+  my @which = @_;
 
-  my $maxlen_diagram = length((sort { length($b) <=> length($a) } (keys %{$ref_graphs->{'diagrams'}}))[0]);
+  @which = sort keys %{$ref_graphs->{'diagrams'}} if (! @which);
+
+  my $maxlen_diagram = length((sort { length($b) <=> length($a) } @which)[0]);
   my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$ref_graphs->{'times'}}))[0]);
 
-  foreach my $diagram (sort keys %{$ref_graphs->{'diagrams'}})
+  foreach my $diagram (@which)
   {
     printf('%-'.$maxlen_diagram.'s  ', $diagram);
 
