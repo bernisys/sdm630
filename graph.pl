@@ -70,10 +70,10 @@ my %graphs = (
     'frequency' => {
       'type' => 'GAUGE',
       'unit' => 'Hz', 'title' => 'Frequency',
-      'min' => 49.5, 'max' => 50.5,
+      'min' => 49.9, 'max' => 50.1,
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
-        { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE1', 'data_range' => '45:55', 'minmax' => 'yes', },
+        { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE1', 'data_range' => '30:70', 'minmax' => 'yes', },
       ],
       'lines' => [
         { 'height' => 51.5,  'color' => '0000a0', 'legend' => 'solar power total disablement\n' },
@@ -110,8 +110,8 @@ my %graphs = (
       'unit' => 'W', 'title' => 'Power Demand',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
-        { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '0:60000', 'minmax' => 'yes', },
-        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '0:60000', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },

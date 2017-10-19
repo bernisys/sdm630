@@ -21,7 +21,7 @@ my %RRD_PARAMS = (
   'energy'         => { 'type' => 'GAUGE', 'rows' => ['kVAh:0:U', ], },
   'energy_kvarh'   => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
   'energy_kwh'     => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
-  'frequency'      => { 'type' => 'GAUGE', 'rows' => ['Hz:45:55', ], },
+  'frequency'      => { 'type' => 'GAUGE', 'rows' => ['Hz:30:70', ], },
   'phi'            => { 'type' => 'GAUGE', 'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
   'power_va'       => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
   'power_var'      => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
