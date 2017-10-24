@@ -33,12 +33,6 @@ my %graphs = (
     '6month'  => { 'start' => -186*86400, 'step' =>  3600, 'func' => ['min', 'avg', 'max'] },
     'year'    => { 'start' => -366*86400, 'step' => 43200, 'func' => ['min', 'avg', 'max'] },
   },
-  'consolidation' => {
-    'cur' => 'LAST',
-    'min' => 'MINIMUM',
-    'avg' => 'AVERAGE',
-    'max' => 'MAXIMUM',
-  },
 #  'rrd_param' => { 'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], }, },
   'diagrams' => {
     'voltage' => {
@@ -246,8 +240,22 @@ sub generate_diagrams {
 
       my @def;
       my @vdef;
+      my @graph = ( 'TEXTALIGN:left' );
       my $maxlen_row = length((sort { length($b->{'row'}) <=> length($a->{'row'}) } (@{$ref_diagram->{'graphs'}}))[0]{'row'});
-      my @graph = ( 'TEXTALIGN:left', 'COMMENT:'.(' ' x $maxlen_row).'     Last    Minimum   Average   Maximum\n');
+
+      my $headings;
+      my %consolidation = (
+        'cur' => { 'heading' => '      Last', 'func' => 'LAST',    'func-vdef' => "LAST", },
+        'min' => { 'heading' => '   Minimum', 'func' => "MIN",     'func-vdef' => "MINIMUM", },
+        'avg' => { 'heading' => '   Average', 'func' => "AVERAGE", 'func-vdef' => "AVERAGE", },
+        'max' => { 'heading' => '   Maximum', 'func' => "MAX",     'func-vdef' => "MAXIMUM", },
+      );
+      # 'consolidation' => { 'cur' => 'LAST', 'min' => 'MINIMUM', 'avg' => 'AVERAGE', 'max' => 'MAXIMUM', },
+      for my $consol (@{$ref_timespan->{'func'}})
+      {
+        $headings .= $consolidation{$consol}{'heading'};
+      }
+      push @graph, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
         my $row = $ref_graph->{'row'};
@@ -255,11 +263,8 @@ sub generate_diagrams {
         my $con = 0;
         for my $consol (@{$ref_timespan->{'func'}})
         {
-          my $function = $ref_graphs->{'consolidation'}{$consol};
-          push @vdef, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol.$consol, $row.'_'.$consol, $function);
-          $function ='MIN' if ($function eq "MINIMUM");
-          $function ='MAX' if ($function eq "MAXIMUM");
-          push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row.'_'.$consol, $diagram, $row, $function);
+          push @vdef, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol.$consol, $row.'_'.$consol, $consolidation{$consol}{'func-vdef'});
+          push @def, sprintf('DEF:%s=rrd/%s.rrd:%s:%s', $row.'_'.$consol, $diagram, $row, $consolidation{$consol}{'func'});
           push @gprint, sprintf('GPRINT:%s:%s', $row.'_'.$consol.$consol, '%6.2lf%S');
           $con++ if (($consol eq "min") or ($consol eq "max"));
         }
