@@ -34,6 +34,13 @@ my %graphs = (
     'year'    => { 'start' => -366*86400, 'step' => 43200, 'func' => ['min', 'avg', 'max'] },
   },
 #  'rrd_param' => { 'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], }, },
+  'html' => {
+    'sections' => [
+      { 'heading' => 'Phase parameters', 'graphs' => [ 'frequency', 'voltage', 'current', 'phi', ], },
+      { 'heading' => 'Power',            'graphs' => [ 'power_w', 'power_var', 'power_va', 'power_w_demand', 'powerfactor', ], },
+      { 'heading' => 'Energy',           'graphs' => [ 'energy', 'energy_kwh', 'energy_kvarh', ], },
+    ],
+  },
   'diagrams' => {
     'voltage' => {
       'type' => 'GAUGE',
