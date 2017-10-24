@@ -214,12 +214,13 @@ sub generate_diagrams {
 
   foreach my $diagram (@which)
   {
-    printf('%-'.$maxlen_diagram.'s  ', $diagram);
+    print "generating: $diagram\n";
 
     my $ref_diagram = $ref_graphs->{'diagrams'}{$diagram};
 
     foreach my $timespan (@{$ref_diagram->{'times'}})
     {
+      print "$diagram / $timespan\n";
       my $ref_timespan = $ref_graphs->{'times'}{$timespan};
       my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
 
@@ -291,7 +292,7 @@ sub generate_diagrams {
         push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
 
-      print join("\n", @def, @vdef, @graph, "", "");
+      print join("\n", @def, @vdef, @graph, "");
       my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
       my $error = RRDs::error();
       if ($error)
@@ -302,10 +303,11 @@ sub generate_diagrams {
       {
         chmod 0644, $basename.'.tmp.png';
         rename $basename.'.tmp.png', $basename.'.png';
-        printf('%'.$maxlen_timespan.'s = %8dx%4d  ', $timespan, $xsize, $ysize);
+        printf("size: %".$maxlen_timespan."s = %8dx%4d\n", $timespan, $xsize, $ysize);
       }
+      print "\n";
     }
-    print "\n";
+    print "-----\n";
   }
 }
 
@@ -316,7 +318,6 @@ sub brighten {
 
   $color =~ /([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
   my ($r, $g, $b) = (hex($1), hex($2), hex($3));
-  print join(", ", $r, $g, $b),"\n";
   $color = sprintf("%02x%02x%02x", ($r + (255-$r) * $factor ), ($g + (255-$g) * $factor), ($b + (255-$b) * $factor));
 
   return $color;
