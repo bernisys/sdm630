@@ -105,7 +105,7 @@ my %graphs = (
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
       'graphs' => [
         { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', },
+        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -142,7 +142,7 @@ my %graphs = (
     'powerfactor' => {
       'type' => 'GAUGE',
       'unit' => '', 'title' => 'Power Factor',
-      'times' => ['hour', '6h', 'day', 'week', 'month', 'year'],
+      'times' => ['hour', '6h', 'day', 'week', 'month'],
       'graphs' => [
         { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
@@ -258,6 +258,7 @@ sub generate_diagrams {
       push @graph, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
+        next if (exists $ref_graph->{'hide'});
         my $row = $ref_graph->{'row'};
         my @gprint;
         my $con = 0;
