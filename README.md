@@ -1,5 +1,5 @@
-SDM630 + Modbus/TCP Adapter
-read-out tool
+# sdm630
+graphing software for SDM630 Modbus V2 w/ Modbus/TCP converter module
 
 prerequisites:
  * perl >= 5.10
