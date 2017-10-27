@@ -237,7 +237,9 @@ sub generate_diagrams {
         '--width', $ref_graphs->{'base'}{'width'},
         '--height', $ref_graphs->{'base'}{'height'},
         '--lazy',
+        '--slope-mode',
         '--alt-autoscale',
+        '--alt-y-grid',
         '--font', 'TITLE:13',
         '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
       );
@@ -332,14 +334,10 @@ sub brighten {
 
 
 #        rrdtool graph filename
-#                --start seconds
-#                --end seconds
-#                --step seconds
+#                --start seconds   --end seconds   --step seconds
+#                --width pixels   --height pixels
 #
 #                --title string
-#
-#                --width pixels
-#                --height pixels
 #
 #                --x-grid x-axis grid and label
 #                --y-grid y-axis grid and label
@@ -354,17 +352,13 @@ sub brighten {
 #                --full-size-mode
 #                --only-graph
 #
-#                --upper-limit value
-#                --lower-limit value
+#                --upper-limit <n>   --lower-limit <n>   --rigid
 #                --alt-autoscale
 #                --alt-autoscale-max
-#                --rigid
 #                --no-legend
 #                --daemon <address>
 #
-#                --font FONTTAG:size:font
-#                --font-render-mode {normal,light,mono}
-#                --font-smoothing-threshold size
+#                --font FONTTAG:size:font   --font-render-mode {normal,light,mono}   --font-smoothing-threshold size
 #
 #                --zoom factor
 #
