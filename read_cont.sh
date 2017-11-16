@@ -5,6 +5,7 @@ while true ; do
   if [ "$SEC" = "0" ] ; then
     date
     ./sdm630-update-rrds.pl
+    echo
   fi
   sleep 1;
 done
