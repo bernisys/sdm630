@@ -81,8 +81,7 @@ sub retrieve {
 
   my $count = scalar(@{$ref_prefixes}) * $grouping;
 
-  my $ref_req = $ref_client->read_holding_registers(unit => 1, address => 2 * $start, quantity => 2 * $count);
-
+  my $ref_req = $ref_client->read_input_registers(unit => 1, address => 2 * $start, quantity => 2 * $count);
   $ref_client->send_request($ref_req);
   my $ref_response = $ref_client->receive_response;
   if ($DEBUG > 3) {
