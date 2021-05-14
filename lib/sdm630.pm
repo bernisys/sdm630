@@ -15,6 +15,9 @@ $Data::Dumper::Indent = 1;
 use Device::Modbus::TCP::Client;
 use RRDs;
 
+my $DEBUG = 0;
+
+
 my %RRD_PARAMS = (
   'charge'         => { 'type' => 'GAUGE', 'rows' => ['Ah:0:U', ], },
   'current'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
@@ -82,7 +85,17 @@ sub retrieve {
 
   $ref_client->send_request($ref_req);
   my $ref_response = $ref_client->receive_response;
-  my $ref_values = $ref_response->{'message'}{'values'};
+  if ($DEBUG > 3) {
+    print Dumper($ref_response);
+  }
+  return undef if ! $ref_response->success;
+
+  my $ref_values = $ref_response->values;
+  if ($DEBUG > 2) {
+    foreach my $value (@{$ref_values}) {
+      printf("  %08x %d\n", $value, $value);
+    }
+  }
 
   for (my $index = 0; $index < $count ; $index++)
   {
@@ -96,10 +109,9 @@ sub retrieve {
 
     my @subitems = split(/_/, $item);
     add_to_hash($ref_readings, $float, \@subitems);
-    #print Dumper($ref_readings);
-
-    #$ref_readings->{'linear'}{$item} = $float;
-    #printf("%d  %s  %5.2f\n", ($start + $index + 1), $item, $float);
+  }
+  if ($DEBUG > 0) {
+    print Dumper($ref_readings);
   }
 }
 
