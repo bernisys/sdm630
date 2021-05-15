@@ -68,7 +68,11 @@ sub retrieve_all {
       'Current_N',
     ], $ref_values);
 
-  print STDERR Dumper($ref_values);
+  SDM630::retrieve($ref_client, 117, 3, [
+      'THD_Voltage',
+      'THD_Current',
+    ], $ref_values);
+
   return $ref_values;
 }
 
