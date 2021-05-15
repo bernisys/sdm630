@@ -33,6 +33,7 @@ my %RRD_PARAMS = (
   'power_w_demand'  => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
   'powerfactor'     => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
   'voltage_l'       => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
+  'voltage_ll'      => { 'type' => 'GAUGE', 'rows' => ['L1L2:0:420', 'L2L3:0:420', 'L3L1:0:420', 'avg:0:420', ], },
 );
 
 my @RRD_RESOLUTIONS = ( '12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', );
@@ -51,6 +52,10 @@ sub retrieve_all {
 
   SDM630::retrieve($ref_client, 50, 1, [
       'Power_VA_demand_tot', 'Power_VA_demand_max',
+    ], $ref_values);
+
+  SDM630::retrieve($ref_client, 100, 1, [
+      'Voltage_LL_L1L2', 'Voltage_LL_L2L3', 'Voltage_LL_L3L1', 'Voltage_LL_avg',
     ], $ref_values);
 
   SDM630::retrieve($ref_client, 112, 1, [
