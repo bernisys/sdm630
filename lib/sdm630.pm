@@ -20,7 +20,7 @@ my $DEBUG = 0;
 
 my %RRD_PARAMS = (
   'charge'         => { 'type' => 'GAUGE', 'rows' => ['Ah:0:U', ], },
-  'current'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'avg:0:100', 'sum:0:100', ], },
+  'current'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'N:0:100', 'avg:0:100', 'sum:0:100', ], },
   'energy'         => { 'type' => 'GAUGE', 'rows' => ['kVAh:0:U', ], },
   'energy_kvarh'   => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
   'energy_kwh'     => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
