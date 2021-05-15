@@ -15,11 +15,10 @@ use lib "lib";
 use Device::Modbus::TCP::Client;
 use sdm630;
 
- 
-my $count = 21;
-my $start = 0;
- 
-my $ref_client = Device::Modbus::TCP::Client->new(host => "192.168.178.16", timeout => 2);
+my $file = shift || 'sdm630.conf';
+my $ref_config = SDM630::read_config($file);
+
+my $ref_client = Device::Modbus::TCP::Client->new(host => $ref_config->{'IP_ADDRESS'}, timeout => $ref_config->{'TIMEOUT'});
 my $ref_values = SDM630::retrieve_all($ref_client);
 $ref_client->disconnect;
 

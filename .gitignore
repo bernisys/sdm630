@@ -4,3 +4,5 @@ rrd/
 .md5
 .stat
 .sha1
+*.conf
+*.log

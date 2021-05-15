@@ -215,7 +215,6 @@ sub feed_rrds {
 }
 
 
-
 sub create_rrd {
   my $ref_params = shift;
 
@@ -272,6 +271,36 @@ sub time_to_seconds {
   my ($num, $unit) = ($1, $2);
   return 0 if (!exists $factors{$unit});
   return $num * $factors{$unit};
+}
+
+
+sub read_config {
+  my $file = shift;
+
+  if (! -f $file) {
+    print "ERROR: no such file ($file)\n";
+    exit 1;
+  }
+
+  my %config;
+
+  open(my $h_conf, '<', $file);
+  while (my $line = <$h_conf>) {
+
+    chomp $line;
+    if ($line =~ /^\s*([_\w]+?)\s*=\s*(.*)$/) {
+      $config{$1} = $2;
+    }
+  } 
+
+  close $h_conf;
+
+  return \%config;
+}
+
+
+sub set_debug_level {
+  $DEBUG = shift;
 }
 
 1;
