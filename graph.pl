@@ -14,10 +14,21 @@ use RRDs;
 
 my $OUTPUT='/home/user/berni/public_html/powermeter';
 
-# TODO:  find best brown value
+# TODO:  find best brown value for L1
 # CD853F - seems okay for now, could be slightly darker though
 # 720239 - a bit dark, hardly distinguishable from black in graphs
-#
+
+my %COLORS = (
+  'L1'  => 'CD853F',
+  'L2'  => '000000',
+  'L3'  => '808080',
+  'N'   => '0000ff',
+  'avg' => '00ff00',
+  'sum' => '00a0a0',
+  'in'  => 'a00000',
+  'out' => '00a000',
+);
+
 my %graphs = (
   'base' => {
     'width' => 600,
@@ -43,15 +54,15 @@ my %graphs = (
     ],
   },
   'diagrams' => {
-    'voltage' => {
+    'voltage_l' => {
       'type' => 'GAUGE',
       'unit' => 'V', 'title' => 'Voltage L-N',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'avg', 'color' => '00ff00', 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 230, 'color' => '0000ff' },
@@ -62,10 +73,10 @@ my %graphs = (
       'unit' => 'V', 'title' => 'Voltage L-L',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'avg', 'color' => '00ff00', 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
-        { 'row' => 'L1L2',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L2L3',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L3L1',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'avg',  'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
+        { 'row' => 'L1L2', 'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'L2L3', 'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'L3L1', 'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 230, 'color' => '0000ff' },
@@ -76,12 +87,12 @@ my %graphs = (
       'unit' => 'A', 'title' => 'Current',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
-        { 'row' => 'avg', 'color' => '00ff00', 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-        { 'row' => 'N',   'color' => '0000ff', 'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'N',   'color' => $COLORS{'N'},   'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
       ],
     },
     'frequency' => {
@@ -113,10 +124,10 @@ my %graphs = (
       'unit' => 'W', 'title' => 'Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -134,15 +145,27 @@ my %graphs = (
         { 'height' => 0, 'color' => '0000ff' },
       ],
     },
+    'power_va_demand' => {
+      'type' => 'GAUGE',
+      'unit' => 'VA', 'title' => 'Power Demand',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
+      ],
+      'lines' => [
+        { 'height' => 0, 'color' => '0000ff' },
+      ],
+    },
     'power_var' => {
       'type' => 'GAUGE',
       'unit' => 'Var', 'title' => 'Reactive Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -153,10 +176,10 @@ my %graphs = (
       'unit' => 'VA', 'title' => 'Apparent Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -167,10 +190,10 @@ my %graphs = (
       'unit' => '', 'title' => 'Power Factor',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -181,10 +204,10 @@ my %graphs = (
       'unit' => '°', 'title' => 'Phase Angle',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
       ],
       'lines' => [
         { 'height' => 0, 'color' => '0000ff' },
@@ -203,8 +226,8 @@ my %graphs = (
       'unit' => 'kWh', 'title' => 'Energy',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'in',  'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
-        { 'row' => 'out', 'color' => '00a000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'in',  'color' => $COLORS{'in'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'out', 'color' => $COLORS{'out'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
       ],
     },
     'energy_kvarh' => {
@@ -212,8 +235,8 @@ my %graphs = (
       'unit' => 'kVarh', 'title' => 'Reactive Energy',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'in',  'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
-        { 'row' => 'out', 'color' => '00a000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'in',  'color' => $COLORS{'in'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'out', 'color' => $COLORS{'out'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
       ],
     },
   },
