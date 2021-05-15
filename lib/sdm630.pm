@@ -34,6 +34,9 @@ my %RRD_PARAMS = (
   'voltage'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
 );
 
+my @RRD_RESOLUTIONS = ( '12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', );
+my $RRD_STEP = 10;
+
 
 sub retrieve_all {
   my $ref_client = shift;
@@ -166,8 +169,6 @@ sub create_all_rrds {
   {
     my $ref_param = $RRD_PARAMS{$key};
     $ref_param->{'name'} = $key;
-    $ref_param->{'step'} = 10;
-    $ref_param->{'resolutions'} = ['12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', ];
     create_rrd($ref_param);
   }
 }
@@ -218,10 +219,10 @@ sub feed_rrds {
 sub create_rrd {
   my $ref_params = shift;
 
-  my $base_step = $ref_params->{'step'};
+  my $base_step = $RRD_STEP;
   my $type = $ref_params->{'type'};
   my $ref_rows = $ref_params->{'rows'};
-  my $ref_resolutions = $ref_params->{'resolutions'};
+  my $ref_resolutions = \@RRD_RESOLUTIONS;
 
   my @rows;
   foreach my $row (@{$ref_rows})
