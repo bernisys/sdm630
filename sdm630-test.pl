@@ -52,7 +52,7 @@ sub output_values {
     my $float = unpack('f', pack('L*', $b32));
     $float = 0 if !defined $float;
 
-    printf("%2d H=0x%04x L=0x%04x W=0x%08x (%4.8f)\n", $start + $pair, $hi, $lo, $b32, $float);
+    printf("%04x H=0x%04x L=0x%04x W=0x%08x (%4.8f)\n", $start + $pair, $hi, $lo, $b32, $float);
   }
 }
 
