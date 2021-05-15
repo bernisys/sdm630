@@ -202,10 +202,19 @@ sub feed_rrds {
     }
 
     $path =~ s/^_//;
+    my $name = $path;
     $path = 'rrd/'.$path.'.rrd';
     $update_pattern =~ s/^://;
     $update_values =~ s/^://;
     #print "updating $path with: $update_pattern / $update_values\n";
+
+    if (! -f $path) {
+      warn("RRD create: $path\n");
+      my $ref_param = $RRD_PARAMS{$name};
+      $ref_param->{'name'} = $name;
+      create_rrd($ref_param);
+      return;
+    }
 
     RRDs::update($path, '--template', $update_pattern, "N:".$update_values);
     my $error = RRDs::error();
