@@ -48,7 +48,7 @@ my %graphs = (
       'unit' => 'V', 'title' => 'Voltage L-N',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'avg', 'color' => 'ffff00', 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
+        { 'row' => 'avg', 'color' => '00ff00', 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
@@ -113,7 +113,7 @@ my %graphs = (
       'unit' => 'W', 'title' => 'Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
@@ -139,7 +139,7 @@ my %graphs = (
       'unit' => 'Var', 'title' => 'Reactive Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
@@ -153,7 +153,7 @@ my %graphs = (
       'unit' => 'VA', 'title' => 'Apparent Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
@@ -167,7 +167,7 @@ my %graphs = (
       'unit' => '', 'title' => 'Power Factor',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
@@ -181,7 +181,7 @@ my %graphs = (
       'unit' => '°', 'title' => 'Phase Angle',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => 'ff00ff', 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => '00a0a0', 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => 'CD853F', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => '808080', 'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
