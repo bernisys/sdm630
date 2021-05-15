@@ -31,7 +31,7 @@ my %RRD_PARAMS = (
   'power_w'        => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
   'power_w_demand' => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
   'powerfactor'    => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
-  'voltage'        => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
+  'voltage_l'      => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
 );
 
 my @RRD_RESOLUTIONS = ( '12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', );
@@ -43,7 +43,7 @@ sub retrieve_all {
   my $ref_values = {};
 
   # retrieve all 3-phase reated values
-  SDM630::retrieve($ref_client, 0, 3, ['Voltage', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'], $ref_values);
+  SDM630::retrieve($ref_client, 0, 3, ['Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'], $ref_values);
 
   # then add all single values
   SDM630::retrieve($ref_client, 21, 1, ['Voltage_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30', 'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_in', 'Energy_kWh_out', 'Energy_kVarh_in', 'Energy_kVarh_out', 'Energy_kVAh', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max', ], $ref_values);
