@@ -95,6 +95,26 @@ my %graphs = (
         { 'row' => 'N',   'color' => $COLORS{'N'},   'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
       ],
     },
+    'current_demand' => {
+      'type' => 'GAUGE',
+      'unit' => 'A', 'title' => 'Current demand',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+      ],
+    },
+    'current_demandmax' => {
+      'type' => 'GAUGE',
+      'unit' => 'A', 'title' => 'Current demand max',
+      'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+      ],
+    },
     'frequency' => {
       'type' => 'GAUGE',
       'unit' => 'Hz', 'title' => 'Frequency',
@@ -213,35 +233,82 @@ my %graphs = (
         { 'height' => 0, 'color' => '0000ff' },
       ],
     },
-    'energy' => {
+    'energy_kvah_total' => {
       'type' => 'GAUGE',
       'unit' => 'kVAh', 'title' => 'Apparent Energy',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'kVAh',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
       ],
     },
-    'energy_kwh' => {
+    'energy_kwh_import' => {
       'type' => 'GAUGE',
       'unit' => 'kWh', 'title' => 'Energy',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'in',  'color' => $COLORS{'in'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
-        { 'row' => 'out', 'color' => $COLORS{'out'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
       ],
     },
-    'energy_kvarh' => {
+    'energy_kwh_export' => {
+      'type' => 'GAUGE',
+      'unit' => 'kWh', 'title' => 'Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+      ],
+    },
+    'energy_kwh_total' => {
+      'type' => 'GAUGE',
+      'unit' => 'kWh', 'title' => 'Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+      ],
+    },
+    'energy_kvarh_import' => {
       'type' => 'GAUGE',
       'unit' => 'kVarh', 'title' => 'Reactive Energy',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'in',  'color' => $COLORS{'in'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
-        { 'row' => 'out', 'color' => $COLORS{'out'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+      ],
+    },
+    'energy_kvarh_export' => {
+      'type' => 'GAUGE',
+      'unit' => 'kVarh', 'title' => 'Reactive Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+      ],
+    },
+    'energy_kvarh_total' => {
+      'type' => 'GAUGE',
+      'unit' => 'kVarh', 'title' => 'Reactive Energy',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
       ],
     },
   },
 );
-
 
 generate_diagrams(\%graphs, @ARGV);
 
