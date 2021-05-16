@@ -38,6 +38,8 @@ my %RRD_PARAMS = (
   'power_va_demand'     => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
   'power_w_demand'      => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
   'powerfactor'         => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
+  'thd_voltage_l'       => { 'type' => 'GAUGE', 'rows' => ['L1:0:110', 'L2:0:110', 'L3:0:110', 'avg:0:110', ], },
+  'thd_current'         => { 'type' => 'GAUGE', 'rows' => ['L1:0:110', 'L2:0:110', 'L3:0:110', 'avg:0:110', ], },
   'voltage_l'           => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
   'voltage_ll'          => { 'type' => 'GAUGE', 'rows' => ['L1L2:0:420', 'L2L3:0:420', 'L3L1:0:420', 'avg:0:420', ], },
 );
