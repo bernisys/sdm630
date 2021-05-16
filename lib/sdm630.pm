@@ -19,21 +19,27 @@ my $DEBUG = 0;
 
 
 my %RRD_PARAMS = (
-  'charge'          => { 'type' => 'GAUGE', 'rows' => ['Ah:0:U', ], },
-  'current'         => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'N:0:100', 'avg:0:100', 'sum:0:100', ], },
-  'energy'          => { 'type' => 'GAUGE', 'rows' => ['kVAh:0:U', ], },
-  'energy_kvarh'    => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
-  'energy_kwh'      => { 'type' => 'GAUGE', 'rows' => ['in:0:U', 'out:0:U', ], },
-  'frequency'       => { 'type' => 'GAUGE', 'rows' => ['Hz:30:70', ], },
-  'phi'             => { 'type' => 'GAUGE', 'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
-  'power_va'        => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_var'       => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_w'         => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
-  'power_va_demand' => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
-  'power_w_demand'  => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
-  'powerfactor'     => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
-  'voltage_l'       => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
-  'voltage_ll'      => { 'type' => 'GAUGE', 'rows' => ['L1L2:0:420', 'L2L3:0:420', 'L3L1:0:420', 'avg:0:420', ], },
+  'charge'              => { 'type' => 'GAUGE', 'rows' => ['Ah:0:U', ], },
+  'current'             => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', 'N:0:100', 'avg:0:100', 'sum:0:100', ], },
+  'current_demand'      => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', ], },
+  'current_demandmax'   => { 'type' => 'GAUGE', 'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', ], },
+  'energy'              => { 'type' => 'GAUGE', 'rows' => ['kVAh:0:U', ], },
+  'energy_kvarh_export' => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kvarh_import' => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kvarh_total'  => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kwh_export'   => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kwh_import'   => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kwh_total'    => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'frequency'           => { 'type' => 'GAUGE', 'rows' => ['Hz:30:70', ], },
+  'phi'                 => { 'type' => 'GAUGE', 'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
+  'power_va'            => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_var'           => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_w'             => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
+  'power_va_demand'     => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
+  'power_w_demand'      => { 'type' => 'GAUGE', 'rows' => ['max:0:60000', 'tot:0:60000', ], },
+  'powerfactor'         => { 'type' => 'GAUGE', 'rows' => ['L1:-1:1', 'L2:-1:1', 'L3:-1:1', 'sum:-1:1', ], },
+  'voltage_l'           => { 'type' => 'GAUGE', 'rows' => ['L1:0:270', 'L2:0:270', 'L3:0:270', 'avg:0:270', ], },
+  'voltage_ll'          => { 'type' => 'GAUGE', 'rows' => ['L1L2:0:420', 'L2L3:0:420', 'L3L1:0:420', 'avg:0:420', ], },
 );
 
 my @RRD_RESOLUTIONS = ( '12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', );
@@ -45,18 +51,18 @@ sub retrieve_all {
   my $ref_values = {};
 
   # retrieve all 3-phase reated values
-  SDM630::retrieve($ref_client, 0, 3, [
+  SDM630::retrieve($ref_client,   0, 3, [
       'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
     ], $ref_values);
 
   # then add all single values
-  SDM630::retrieve($ref_client, 21, 1, [
-      'Voltage_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
-      'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_in', 'Energy_kWh_out', 'Energy_kVarh_in', 'Energy_kVarh_out',
-      'Energy_kVAh', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
+  SDM630::retrieve($ref_client,  21, 1, [
+      'Voltage_L_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
+      'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
+      'Energy_kVAh_Total_tot', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 50, 1, [
+  SDM630::retrieve($ref_client,  50, 1, [
       'Power_VA_demand_tot', 'Power_VA_demand_max',
     ], $ref_values);
 
@@ -69,38 +75,86 @@ sub retrieve_all {
     ], $ref_values);
 
   SDM630::retrieve($ref_client, 117, 3, [
-      'THD_Voltage',
-      'THD_Current',
+      'THD_Voltage_L', 'THD_Current',
     ], $ref_values);
 
+  SDM630::retrieve($ref_client, 124, 1, [
+      'THD_Voltage_L_avg', 'THD_Current_avg',
+    ], $ref_values);
+
+  SDM630::retrieve($ref_client, 129, 3, [
+      'Current_demand', 'Current_demandmax',
+    ], $ref_values);
+
+# TODO: this value seems to be unknown by my SDM630 ...
+#  SDM630::retrieve($ref_client, 167, 1, [
+#      'THD_Voltage_LL_L1L2', 'THD_Voltage_LL_L2L3', 'THD_Voltage_LL_L3L1', 'THD_Voltage_LL_avg',
+#    ], $ref_values);
+
+  SDM630::retrieve($ref_client, 171, 1, [
+      'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
+    ], $ref_values);
+
+  SDM630::retrieve($ref_client, 173, 3, [
+      'Energy_kWh_Import', 'Energy_kWh_Export', 'Energy_kWh_Total', 'Energy_kVarh_Import', 'Energy_kVarh_Export', 'Energy_kVarh_Total',
+    ], $ref_values);
+
+#  189 L1 total kvarh (3) kvarh
   return $ref_values;
 }
 
 
 sub retrieve_all_dummy {
+
   return {
-    'Charge'      => { 'Ah' => '1251.346', },
-    'Frequency'   => { 'Hz' => '50.035', },
-    'Current'     => { 'L1' =>   '0.224', 'L2' =>   '1.092', 'L3' => '  2.101', 'avg' =>   '1.183', 'sum' => '3.551', },
-    'PowerFactor' => { 'L1' =>   '0.828', 'L2' =>   '0.758', 'L3' =>   '0.904', 'sum' =>   '0.859', },
+    'Charge'      => { 'Ah'   => '124819.89', },
+    'Frequency'   => { 'Hz'   =>    '50.01', },
+
+    'phi'         => { 'L1'   =>   '-25.37', 'L2'   =>   '-10.00', 'L3'   =>   '-22.53', 'sum' =>    '-14.27', },
+    'PowerFactor' => { 'L1'   =>     '0.90', 'L2'   =>     '0.98', 'L3'   =>     '0.92', 'sum' =>     '0.96', },
+
     'Voltage'     => {
-      'L'         => { 'L1' => '229.636', 'L2' => '229.168', 'L3' => '230.414', 'avg' => '229.739', },
-      'LL'        => { 'L1L2' => '399.018', 'L2L3' => '399.461', 'L3L1' => '398.935', 'avg' => '399.138', },
+      'L'         => { 'L1'   =>   '233.38', 'L2'   =>   '231.02', 'L3'   =>   '234.39', 'avg' =>    '232.93', },
+      'LL'        => { 'L1L2' =>   '402.19', 'L2L3' =>   '403.06', 'L3L1' =>   '405.11', 'avg' =>    '403.45', },
     },
-    'phi'         => { 'L1' =>  '34.056', 'L2' =>  '40.713', 'L3' =>  '25.183', 'sum' =>  '30.707', },
-    'Power'       => {
-      'VA'        => { 'L1' => '51.646', 'L2' => '250.296', 'L3' => '484.298', 'sum' => '786.152',
-        'demand'  => { 'max' => '11836.647', 'tot' => '3722.871' },
-      },
-      'Var'       => { 'L1' => '29.668', 'L2' => '163.387', 'L3' => '205.682', 'sum' => '398.290', },
-      'W'         => { 'L1' => '42.274', 'L2' => '189.613', 'L3' => '438.283', 'sum' => '670.661',
-        'demand'  => { 'max' => '7082.617', 'tot' => '670.171', },
-      },
+
+    'Current'     => { 'L1'   =>     '0.83', 'L2'   =>     '4.49', 'L3'   =>     '1.18', 'N'   =>     '3.52', 'avg' => '2.29', 'sum' => '6.89',
+      'demand'    => { 'L1'   =>     '0.85', 'L2'   =>     '4.40', 'L3'   =>     '1.25', },
+      'demandmax' => { 'L1'   =>  '8761.48', 'L2'   =>    '49.67', 'L3'   =>   '988.22', },
     },
+
     'Energy'      => {
-      'kVAh'      => '298.806',
-      'kVarh'     => { 'in' =>  '95.153', 'out' =>  '24.565', },
-      'kWh'       => { 'in' => '131.457', 'out' => '142.317', },
+      'kVAh'      => {
+        'Total'   => { 'tot'  => '52404.85', },
+      },
+      'kVarh'     => {
+        'Export'  => { 'L1'   =>  '1599.09', 'L2'   =>  '3550.82', 'L3'   =>  '3244.10', 'tot' =>  '8394.02', },
+        'Import'  => { 'L1'   =>   '561.52', 'L2'   =>  '1722.45', 'L3'   =>   '369.44', 'tot' =>  '2653.42', },
+        'Total'   => { 'L1'   =>  '2160.61', 'L2'   =>  '5273.27', 'L3'   =>  '3613.55', 'tot' => '11047.44', },
+      },
+      'kWh'       => {
+        'Export'  => { 'L1'   =>  '4848.65', 'L2'   =>  '2779.63', 'L3'   =>  '4963.93', 'tot' => '12592.22', },
+        'Import'  => { 'L1'   =>  '8847.36', 'L2'   => '20972.09', 'L3'   =>  '8815.47', 'tot' => '38634.93', },
+        'Total'   => { 'L1'   => '13696.02', 'L2'   => '23751.73', 'L3'   => '13779.41', 'tot' => '51227.16', },
+      },
+    },
+
+    'Power'       => {
+      'VA'        => { 'L1'   =>   '195.33', 'L2'   =>  '1039.31', 'L3'   =>   '277.97', 'sum' =>  '1512.62',
+        'demand'  => { 'max'  => '11836.64', 'tot'  =>  '1512.20', },
+      },
+      'Var'       => { 'L1'   =>   '-83.69', 'L2'   =>  '-180.48', 'L3'   =>  '-106.53', 'sum' =>  '-370.71', },
+      'W'         => { 'L1'   =>   '176.50', 'L2'   =>  '1023.52', 'L3'   =>   '256.74', 'sum' =>  '1456.77',
+        'demand'  => { 'max'  => '11795.17', 'tot'  =>  '1439.35', },
+      },
+    },
+
+    'THD'         => {
+      'Current'   => { 'L1'   =>    '45.18', 'L2'   =>    '27.25', 'L3'   =>    '44.21', 'avg' =>    '38.88', },
+      'Voltage'   => {
+        'L'       => { 'L1'   =>     '4.41', 'L2'   =>     '3.42', 'L3'   =>     '3.42', 'avg' =>     '3.92', },
+        'LL'      => { 'L1L2' =>     '0.00', 'L2L3' =>     '0.00', 'L3L1' =>     '0.00', 'avg' =>     '0.00', },
+      },
     },
   };
 }
