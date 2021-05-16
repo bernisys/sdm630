@@ -306,7 +306,7 @@ sub feed_rrds {
     RRDs::update($path, '--template', $update_pattern, "N:".$update_values);
     my $error = RRDs::error();
     if ($error) {
-      warn("RRDs error: $error\n");
+      warn("RRDs error: $name / $error\n");
     }
   }
 }
