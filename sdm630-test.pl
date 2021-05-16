@@ -20,9 +20,13 @@ my $ref_config = SDM630::read_config($file);
 
 my $ref_client = Device::Modbus::TCP::Client->new(host => $ref_config->{'IP_ADDRESS'}, timeout => $ref_config->{'TIMEOUT'});
 
-for (my $start = 0; $start < 400; $start += 10) {
-output_values(retrieve_raw(1, $start,  10), $start );
+for (my $start = 0; $start < 400; $start += 20) {
+  output_values(retrieve_raw(1, $start,  20), $start );
 }
+
+my $ref_data = SDM630::retrieve_all($ref_client);
+print Dumper($ref_data);
+
 exit 0;
 
 
@@ -52,7 +56,7 @@ sub output_values {
     my $float = unpack('f', pack('L*', $b32));
     $float = 0 if !defined $float;
 
-    printf("%04x H=0x%04x L=0x%04x W=0x%08x (%4.8f)\n", $start + $pair, $hi, $lo, $b32, $float);
+    printf("%04d (%04x) H=0x%04x L=0x%04x W=0x%08x (%4.8f)\n", ($start + $pair)/2, $start + $pair, $hi, $lo, $b32, $float);
   }
 }
 
