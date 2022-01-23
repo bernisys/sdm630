@@ -110,13 +110,13 @@ sub retrieve_all {
   } elsif ($type eq "SDM72") {
     # retrieve all 3-phase reated values
     SDM630::retrieve($ref_client, $unit,   0, 3, [
-        'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
+        'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor',
       ], $ref_values);
 
     # then add all single values
     SDM630::retrieve($ref_client, $unit,  21, 1, [
         'Voltage_L_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
-        'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz',
+        'Power_Var_sum', 'PowerFactor_sum', '_33', '_34', '_35', 'Frequency_Hz',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 100, 1, [
