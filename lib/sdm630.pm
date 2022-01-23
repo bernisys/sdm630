@@ -50,54 +50,60 @@ my $RRD_STEP = 10;
 
 sub retrieve_all {
   my $ref_client = shift;
+  my $unit = shift;
+  my $type = shift;
+
+  $unit = 1 if !defined $unit;
+  $type = "SDM630" if !defined $type;
+
   my $ref_values = {};
 
   # retrieve all 3-phase reated values
-  SDM630::retrieve($ref_client,   0, 3, [
+  SDM630::retrieve($ref_client, $unit,   0, 3, [
       'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
     ], $ref_values);
 
   # then add all single values
-  SDM630::retrieve($ref_client,  21, 1, [
+  SDM630::retrieve($ref_client, $unit,  21, 1, [
       'Voltage_L_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
       'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
       'Energy_kVAh_Total_tot', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client,  50, 1, [
+  SDM630::retrieve($ref_client, $unit,  50, 1, [
       'Power_VA_demand_tot', 'Power_VA_demand_max',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 100, 1, [
+  SDM630::retrieve($ref_client, $unit, 100, 1, [
       'Voltage_LL_L1L2', 'Voltage_LL_L2L3', 'Voltage_LL_L3L1', 'Voltage_LL_avg',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 112, 1, [
+  SDM630::retrieve($ref_client, $unit, 112, 1, [
       'Current_N',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 117, 3, [
+  SDM630::retrieve($ref_client, $unit, 117, 3, [
       'THD_Voltage_L', 'THD_Current',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 124, 1, [
+    SDM630::retrieve($ref_client, $unit, 124, 1, [
       'THD_Voltage_L_avg', 'THD_Current_avg',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 129, 3, [
+  SDM630::retrieve($ref_client, $unit, 129, 3, [
       'Current_demand', 'Current_demandmax',
     ], $ref_values);
 
 # TODO: this value seems to be unknown by my SDM630 ...
-#  SDM630::retrieve($ref_client, 167, 1, [
+#  SDM630::retrieve($ref_client, $unit, 167, 1, [
 #      'THD_Voltage_LL_L1L2', 'THD_Voltage_LL_L2L3', 'THD_Voltage_LL_L3L1', 'THD_Voltage_LL_avg',
 #    ], $ref_values);
 
-  SDM630::retrieve($ref_client, 171, 1, [
+  SDM630::retrieve($ref_client, $unit, 171, 1, [
       'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
     ], $ref_values);
 
-  SDM630::retrieve($ref_client, 173, 3, [
+  SDM630::retrieve($ref_client, $unit, 173, 3, [
       'Energy_kWh_Import', 'Energy_kWh_Export', 'Energy_kWh_Total', 'Energy_kVarh_Import', 'Energy_kVarh_Export', 'Energy_kVarh_Total',
     ], $ref_values);
 
@@ -164,6 +170,7 @@ sub retrieve_all_dummy {
 
 sub retrieve {
   my $ref_client = shift;
+  my $unit = shift;
   my $start = shift;
   my $grouping = shift;
   my $ref_prefixes = shift;
@@ -171,7 +178,7 @@ sub retrieve {
 
   my $count = scalar(@{$ref_prefixes}) * $grouping;
 
-  my $ref_req = $ref_client->read_input_registers(unit => 1, address => 2 * $start, quantity => 2 * $count);
+  my $ref_req = $ref_client->read_input_registers(unit => $unit, address => 2 * $start, quantity => 2 * $count);
   $ref_client->send_request($ref_req);
   my $ref_response = $ref_client->receive_response;
   if ($DEBUG > 3) {
