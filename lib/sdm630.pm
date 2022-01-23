@@ -96,9 +96,9 @@ sub retrieve_all {
       ], $ref_values);
 
 # TODO: this value seems to be unknown by my SDM630 ...
-#  SDM630::retrieve($ref_client, $unit, 167, 1, [
-#      'THD_Voltage_LL_L1L2', 'THD_Voltage_LL_L2L3', 'THD_Voltage_LL_L3L1', 'THD_Voltage_LL_avg',
-#    ], $ref_values);
+#    SDM630::retrieve($ref_client, $unit, 167, 1, [
+#        'THD_Voltage_LL_L1L2', 'THD_Voltage_LL_L2L3', 'THD_Voltage_LL_L3L1', 'THD_Voltage_LL_avg',
+#      ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 171, 1, [
         'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
