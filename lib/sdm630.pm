@@ -386,8 +386,18 @@ sub read_config {
 
     chomp $line;
     if ($line =~ /^\s*([_\w]+?)\s*=\s*(.*)$/) {
-      $config{$1} = $2;
-    }
+      my ($key, $value) = ($1, $2);
+        if ($key eq "DEVICE") {
+          my @values = split(/,/, $value);
+          push @{$config{$key}}, {
+            'NAME' => $values[0],
+            'TYPE' => $values[1],
+            'UNIT' => $values[2],
+          };
+        } else {
+          $config{$key} = $value;
+        }
+      }
   } 
 
   close $h_conf;
