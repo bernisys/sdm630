@@ -127,6 +127,21 @@ sub retrieve_all {
     SDM630::retrieve($ref_client, $unit, 112, 1, [
         'Current_N',
       ], $ref_values);
+
+    SDM630::retrieve($ref_client, $unit, 171, 1, [
+        'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
+      ], $ref_values);
+
+    # preiodical counters (resettable)
+    SDM630::retrieve($ref_client, $unit, 192, 1, [
+        'Energy_kWh_Total_per', '_193', 'Energy_kWh_Import_per', 'Energy_kWh_Export_per',
+      ], $ref_values);
+
+    SDM630::retrieve($ref_client, $unit, 640, 1, [
+        'Power_W_imp',
+        'Power_W_exp',
+      ], $ref_values);
+
   }
 
 #  189 L1 total kvarh (3) kvarh
