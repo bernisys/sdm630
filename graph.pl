@@ -19,14 +19,14 @@ my $OUTPUT='/home/user/berni/public_html/powermeter';
 # 720239 - a bit dark, hardly distinguishable from black in graphs
 
 my %COLORS = (
-  'L1'  => 'CD853F',
-  'L2'  => '000000',
-  'L3'  => '808080',
-  'N'   => '0000ff',
+  'L1'  => 'CD853F', # EU convention: L1 insulation color is brown
+  'L2'  => '000000', # EU convention: L2 insulation color is black
+  'L3'  => '808080', # EU convention: L3 insulation color is gray
+  'N'   => '0000ff', # EU convention: N insulation color is blue
   'avg' => '00ff00',
   'sum' => '00a0a0',
-  'in'  => 'a00000',
-  'out' => '00a000',
+  'in'  => 'a00000', # red for input from public grid
+  'out' => '00a000', # green for output to public grid
 );
 
 my %graphs = (
