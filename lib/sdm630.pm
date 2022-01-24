@@ -117,10 +117,9 @@ sub retrieve_all {
 
     # then add all single values
     SDM630::retrieve($ref_client, $unit,  21, 1, [
-        'Voltage_L_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
-        'Power_Var_sum', 'PowerFactor_sum', '_33', '_34', '_35', 'Frequency_Hz',
+        'Voltage_L_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        'Power_Var_sum', 'PowerFactor_sum', '_32', '_33', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot',
       ], $ref_values);
-
     SDM630::retrieve($ref_client, $unit, 100, 1, [
         'Voltage_LL_L1L2', 'Voltage_LL_L2L3', 'Voltage_LL_L3L1', 'Voltage_LL_avg',
       ], $ref_values);
