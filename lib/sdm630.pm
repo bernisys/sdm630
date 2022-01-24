@@ -30,6 +30,7 @@ my %RRD_PARAMS = (
   'energy_kwh_export'   => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
   'energy_kwh_import'   => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
   'energy_kwh_total'    => { 'type' => 'GAUGE', 'rows' => ['L1:0:U', 'L2:0:U', 'L3:0:U', 'tot:0:U', ], },
+  'energy_kwh_periodic' => { 'type' => 'GAUGE', 'rows' => ['imp:0:U', 'exp:0:U', 'tot:0:U',], },
   'frequency'           => { 'type' => 'GAUGE', 'rows' => ['Hz:30:70', ], },
   'phi'                 => { 'type' => 'GAUGE', 'rows' => ['L1:-360:360', 'L2:-360:360', 'L3:-360:360', 'sum:-360:360', ], },
   'power_va'            => { 'type' => 'GAUGE', 'rows' => ['L1:-20000:20000', 'L2:-20000:20000', 'L3:-20000:20000', 'sum:-60000:60000', ], },
@@ -134,7 +135,7 @@ sub retrieve_all {
 
     # preiodical counters (resettable)
     SDM630::retrieve($ref_client, $unit, 192, 1, [
-        'Energy_kWh_Total_per', '_193', 'Energy_kWh_Import_per', 'Energy_kWh_Export_per',
+        'Energy_kWh_periodic_tot', '_193', 'Energy_kWh_periodic_imp', 'Energy_kWh_periodic_exp',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 640, 1, [
