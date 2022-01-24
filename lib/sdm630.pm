@@ -297,33 +297,45 @@ sub output_values {
 
 
 sub create_all_rrds {
+  my $subdir = shift;
+
   foreach my $key (keys %RRD_PARAMS)
   {
     my $ref_param = $RRD_PARAMS{$key};
     $ref_param->{'name'} = $key;
-    create_rrd($ref_param);
+    create_rrd($subdir, $ref_param);
   }
 }
 
 
 sub feed_rrds {
   my $ref_values = shift;
-  my $path = shift || '';
+  my $subdir = shift;
+  my $hierarchy = shift || '';
 
   my %values = ();
   foreach my $key (sort keys %{$ref_values})
   {
     if (ref $ref_values->{$key} eq 'HASH')
     {
-      feed_rrds($ref_values->{$key}, $path.'_'.lc($key));
+      feed_rrds($ref_values->{$key}, $subdir, $hierarchy.'_'.lc($key));
     }
     else
     {
       $values{$key} = $ref_values->{$key};
     }
   }
+
   if (keys %values)
   {
+
+    if (! -d "rrd") {
+      mkdir "rrd";
+    }
+
+    if ( (defined $subdir) and (! -d "rrd/".$subdir)) {
+      mkdir "rrd/".$subdir;
+    }
 
     my $update_pattern = '';
     my $update_values = '';
@@ -333,22 +345,22 @@ sub feed_rrds {
       $update_values .= ':'.$values{$key};
     }
 
-    $path =~ s/^_//;
-    my $name = $path;
-    $path = 'rrd/'.$path.'.rrd';
+    $hierarchy =~ s/^_//;
+    my $name = $hierarchy;
+    my $fullpath = 'rrd/'.(defined $subdir ? $subdir.'/' : '').$hierarchy.'.rrd';
     $update_pattern =~ s/^://;
     $update_values =~ s/^://;
-    #print "updating $path with: $update_pattern / $update_values\n";
+    #print "updating $fullpath with: $update_pattern / $update_values\n";
 
-    if (! -f $path) {
-      warn("RRD create: $path\n");
+    if (! -f $fullpath) {
+      warn("RRD create: $fullpath\n");
       my $ref_param = $RRD_PARAMS{$name};
       $ref_param->{'name'} = $name;
-      create_rrd($ref_param);
+      create_rrd($subdir, $ref_param);
       return;
     }
 
-    RRDs::update($path, '--template', $update_pattern, "N:".$update_values);
+    RRDs::update($fullpath, '--template', $update_pattern, "N:".$update_values);
     my $error = RRDs::error();
     if ($error) {
       warn("RRDs error: $name / $error\n");
@@ -358,6 +370,7 @@ sub feed_rrds {
 
 
 sub create_rrd {
+  my $subdir = shift;
   my $ref_params = shift;
 
   my $base_step = $RRD_STEP;
@@ -393,9 +406,10 @@ sub create_rrd {
   }
 
   my $name = $ref_params->{'name'};
-  if (! -f 'rrd/'.$name.'.rrd')
+  my $fullpath = 'rrd/'.(defined $subdir ? $subdir.'/' : '').$name.'.rrd';
+  if (! -f $fullpath)
   {
-    RRDs::create('rrd/'.$name.'.rrd', '--step', $base_step, @rows, @resolutions);
+    RRDs::create($fullpath, '--step', $base_step, @rows, @resolutions);
     my $error = RRDs::error();
     if ($error) {
       warn("RRDs error: $error\n");
