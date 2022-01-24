@@ -64,10 +64,10 @@ sub retrieve_all {
         'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
       ], $ref_values);
 
-    # then add all single values
+    # then add all single values (sums, averages, energies, ... not phase-related)
     SDM630::retrieve($ref_client, $unit,  21, 1, [
-        'Voltage_L_avg', '_23', 'Current_avg', 'Current_sum', '_26', 'Power_W_sum', '_28', 'Power_VA_sum', '_30',
-        'Power_Var_sum', 'PowerFactor_sum', '_33', 'phi_sum', '_35', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
+        'Voltage_L_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        'Power_Var_sum', 'PowerFactor_sum', '_32', 'phi_sum', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
         'Energy_kVAh_Total_tot', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
       ], $ref_values);
 
