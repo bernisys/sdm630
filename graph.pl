@@ -49,10 +49,10 @@ sub generate_diagrams {
     {
       print "$diagram / $timespan\n";
       my $ref_timespan = $GRAPHS{'times'}{$timespan};
-      my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
+      my $basename = $subdir.'/'.$diagram.'-'.$timespan;
 
       my @params = (
-        $OUTPUT.'/'.$diagram.'-'.$timespan.'.tmp.png',
+        $basename.'.tmp.png',
         '--start', $ref_timespan->{'start'},
         '--width', $GRAPHS{'base'}{'width'},
         '--height', $GRAPHS{'base'}{'height'},
