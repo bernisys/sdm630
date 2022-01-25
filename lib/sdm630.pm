@@ -45,6 +45,7 @@ my %GRAPHS = (
     'width' => 600,
     'height' => 200,
   },
+  'time_order' => [ 'hour', '6h', 'day', 'week', 'month', '3month', '6month', 'year', '5year', ],
   'times' => {
     'hour'    => { 'start' => -3600,        'step' =>    10, 'func' => ['avg'] },
     '6h'      => { 'start' => -6*3600,      'step' =>    10, 'func' => ['min', 'avg', 'max'] },
