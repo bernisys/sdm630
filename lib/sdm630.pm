@@ -464,7 +464,7 @@ my %GRAPHS = (
       'unit' => 'Ah', 'title' => 'Charge',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'Ah',  'color' => $COLORS{'def'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'Ah',  'color' => $COLORS{'default'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
       ],
       'availability' => {
         'SDM630' => 1,
