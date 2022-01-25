@@ -810,6 +810,143 @@ sub get_graph_list {
 }
 
 
+sub generate_diagrams {
+  my $subdir = shift;
+  my $type = shift;
+  my $name = shift;
+  my @which = @_;
+
+  @which = sort keys %{$GRAPHS{'diagrams'}} if (! @which);
+
+  my $maxlen_diagram = length((sort { length($b) <=> length($a) } @which)[0]);
+  my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$GRAPHS{'times'}}))[0]);
+
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
+  $subdir .= '/'.$name;
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
+
+  foreach my $diagram (@which)
+  { 
+    my $ref_diagram = $GRAPHS{'diagrams'}{$diagram};
+    next if (!exists $ref_diagram->{'availability'}{$type});
+
+    print "generating: $name ($type) $diagram\n";
+
+    foreach my $timespan (@{$ref_diagram->{'times'}})
+    { 
+      printf("  graph %s %".$maxlen_timespan."s ", $diagram, $timespan);
+      my $ref_timespan = $GRAPHS{'times'}{$timespan};
+      my $basename = $subdir.'/'.$diagram.'-'.$timespan;
+
+      my @params = (
+        $basename.'.tmp.png',
+        '--start', $ref_timespan->{'start'},
+        '--width', $GRAPHS{'base'}{'width'},
+        '--height', $GRAPHS{'base'}{'height'},
+        '--lazy',
+        '--slope-mode',
+        '--alt-autoscale',
+        '--alt-y-grid',
+        '--font', 'TITLE:13',
+        '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
+      );
+
+      push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
+      push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
+
+      my @def;
+      my @vdef;
+      my @graph = ( 'TEXTALIGN:left' );
+      my $maxlen_row = length((sort { length($b->{'row'}) <=> length($a->{'row'}) } (@{$ref_diagram->{'graphs'}}))[0]{'row'});
+
+      my $headings;
+      my %consolidation = (
+        'cur' => { 'heading' => '      Last', 'func' => 'LAST',    'func-vdef' => "LAST", },
+        'min' => { 'heading' => '   Minimum', 'func' => "MIN",     'func-vdef' => "MINIMUM", },
+        'avg' => { 'heading' => '   Average', 'func' => "AVERAGE", 'func-vdef' => "AVERAGE", },
+        'max' => { 'heading' => '   Maximum', 'func' => "MAX",     'func-vdef' => "MAXIMUM", },
+      );
+      # 'consolidation' => { 'cur' => 'LAST', 'min' => 'MINIMUM', 'avg' => 'AVERAGE', 'max' => 'MAXIMUM', },
+      for my $consol (@{$ref_timespan->{'func'}})
+      {
+        $headings .= $consolidation{$consol}{'heading'};
+      }
+      push @graph, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
+
+      foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
+      {
+        next if (exists $ref_graph->{'hide'});
+        my $ref_typeinfo = $ref_diagram->{'availability'}{$type};
+        if (ref $ref_typeinfo eq "HASH") {
+          next if (!exists $ref_typeinfo->{$ref_graph->{'row'}});
+        }
+        my $row = $ref_graph->{'row'};
+        my @gprint;
+        my $con = 0;
+        for my $consol (@{$ref_timespan->{'func'}})
+        {
+          push @vdef, sprintf('VDEF:%s=%s,%s', $row.'_'.$consol.$consol, $row.'_'.$consol, $consolidation{$consol}{'func-vdef'});
+          push @def, sprintf('DEF:%s=rrd/%s/%s.rrd:%s:%s', $row.'_'.$consol, $name, $diagram, $row, $consolidation{$consol}{'func'});
+          push @gprint, sprintf('GPRINT:%s:%s', $row.'_'.$consol.$consol, '%6.2lf%S');
+          $con++ if (($consol eq "min") or ($consol eq "max"));
+        }
+        if (($ref_graph->{'minmax'} eq 'yes') and ($con >= 2))
+        {
+          # min/max area: draw an invisible "*_min" and stack "*_max - *_min" onto it
+          push @def, sprintf('CDEF:%s_diff=%s_max,%s_min,-', $row, $row, $row);
+          push @graph, 'AREA:'.$row.'_min#ffffff';
+          push @graph, 'AREA:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7).'::STACK';
+        }
+        push @graph, sprintf('%s:%s_avg#%s:%-'.$maxlen_row.'s', $ref_graph->{'style'}, $row, $ref_graph->{'color'}, $row);
+        push @graph, @gprint, 'COMMENT:\n';
+      }
+
+      my @lines;
+      foreach my $ref_line (@{$ref_diagram->{'lines'}})
+      { 
+        my $line = sprintf('HRULE:%s#%s', $ref_line->{'height'}, $ref_line->{'color'});
+        if (exists $ref_line->{'legend'})
+        { 
+          $line .= ':'.$ref_line->{'legend'};
+        }
+        push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
+      }
+
+      #print join("\n", '', @def, @vdef, @graph, '');
+      my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
+      my $error = RRDs::error();
+      if ($error)
+      {
+        warn "ERROR: ".$error;
+      }
+      else
+      {
+        chmod 0644, $basename.'.tmp.png';
+        rename $basename.'.tmp.png', $basename.'.png';
+        printf("  (%4dx%4d) => %s.png\n", $xsize, $ysize, $basename);
+      }
+    }
+    print "-----\n";
+  }
+}
+
+
+sub brighten {
+  my $color = shift;
+  my $factor = shift;
+
+  $color =~ /([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
+  my ($r, $g, $b) = (hex($1), hex($2), hex($3));
+  $color = sprintf("%02x%02x%02x", ($r + (255-$r) * $factor ), ($g + (255-$g) * $factor), ($b + (255-$b) * $factor));
+
+  return $color;
+}
+
+
 sub time_to_seconds {
   my $timestring = shift;
 
