@@ -286,9 +286,11 @@ sub output_values {
     if (ref $ref_values->{$key} eq 'HASH')
     {
       output_values($ref_values->{$key}, $path.' '.$key);
+      # descend into sub hash
     }
     else
     {
+      # only append a value
       $string .= sprintf('%5s: %9.2f   ', $key, $ref_values->{$key});
     }
   }
