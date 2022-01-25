@@ -16,8 +16,6 @@ use Device::Modbus::TCP::Client;
 use sdm630;
 
 my $file = shift || 'sdm630.conf';
-my $address = shift || 1;
-
 my $ref_config = SDM630::read_config($file);
 
 my $ref_client = Device::Modbus::TCP::Client->new(host => $ref_config->{'IP_ADDRESS'}, timeout => $ref_config->{'TIMEOUT'});
