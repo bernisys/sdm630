@@ -4,7 +4,7 @@ while true ; do
   SEC=$(($(date +%s) % 10))
   if [ "$SEC" = "0" ] ; then
     date
-    ./sdm630-update-rrds.pl
+    ./sdm72-read.pl
     echo
   fi
   sleep 1;
