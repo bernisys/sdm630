@@ -913,15 +913,13 @@ sub generate_indexes {
   foreach my $unit (sort keys %indexdata) {
     print "$unit\n";
     foreach my $timespan (sort keys %{$indexdata{$unit}}) {
-      print "  $timespan\n";
       my $ref_sections = $indexdata{$unit}{$timespan};
 
       if ($timespan ne '') {
         $timespan = '-'.$timespan;
       }
       my $file = $subdir.'/index'.$timespan.'.html';
-      print $file,"\n";
-  print Dumper($ref_sections);
+      print "  creating: ".$file,"\n";
       open my $h_file, '>', $file;
       foreach my $section ('header', 'body', 'footer') {
         print $h_file join('', @{$ref_sections->{$section}});
