@@ -41,6 +41,12 @@ while (1==1) {
 
   my $sleeptime = 10 - time % 10;
   print join('', $now, "\n", @output, $sleeptime, "\n");
+
+  if ((time % 300) < 10) {
+    open(my $h_file, '>', 'web/readings.txt');
+    print $h_file $now, "\n", @output;
+    close($h_file);
+  }
   sleep $sleeptime;
 }
 
