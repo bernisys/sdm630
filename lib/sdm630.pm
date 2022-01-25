@@ -59,9 +59,12 @@ my %COLORS = (
   'L3'  => '808080', # EU convention: L3 insulation color is gray
   'N'   => '0000ff', # EU convention: N insulation color is blue
   'avg' => '00ff00',
+  'max' => 'a00000',
   'sum' => '00a0a0',
   'in'  => 'a00000', # red for input from public grid
   'out' => '00a000', # green for output to public grid
+  'default' => '000000', # default color black
+  'normal'  => '0000ff', # default color for normal values
 );
 
 
