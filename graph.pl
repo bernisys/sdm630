@@ -320,28 +320,28 @@ sub generate_diagrams {
   my $ref_graphs = shift;
   my @which = @_;
 
-  @which = sort keys %{$ref_graphs->{'diagrams'}} if (! @which);
+  @which = sort keys %{$GRAPHS{'diagrams'}} if (! @which);
 
   my $maxlen_diagram = length((sort { length($b) <=> length($a) } @which)[0]);
-  my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$ref_graphs->{'times'}}))[0]);
+  my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$GRAPHS{'times'}}))[0]);
 
   foreach my $diagram (@which)
   {
     print "generating: $diagram\n";
+    my $ref_diagram = $GRAPHS{'diagrams'}{$diagram};
 
-    my $ref_diagram = $ref_graphs->{'diagrams'}{$diagram};
 
     foreach my $timespan (@{$ref_diagram->{'times'}})
     {
       print "$diagram / $timespan\n";
-      my $ref_timespan = $ref_graphs->{'times'}{$timespan};
+      my $ref_timespan = $GRAPHS{'times'}{$timespan};
       my $basename = $OUTPUT.'/'.$diagram.'-'.$timespan;
 
       my @params = (
         $OUTPUT.'/'.$diagram.'-'.$timespan.'.tmp.png',
         '--start', $ref_timespan->{'start'},
-        '--width', $ref_graphs->{'base'}{'width'},
-        '--height', $ref_graphs->{'base'}{'height'},
+        '--width', $GRAPHS{'base'}{'width'},
+        '--height', $GRAPHS{'base'}{'height'},
         '--lazy',
         '--slope-mode',
         '--alt-autoscale',
