@@ -784,7 +784,7 @@ sub feed_rrds {
 
     if (! -f $fullpath) {
       warn("RRD create: $fullpath\n");
-      my $ref_param = $RRD_PARAMS{$name};
+      my $ref_param = $GRAPHS{'diagrams'}{$name};
       $ref_param->{'name'} = $name;
       create_rrd($subdir, $ref_param);
       return;
@@ -822,10 +822,9 @@ sub create_rrd {
   #    },
 
   my @rows;
-  foreach my $row (@{$ref_rows})
+  foreach my $ref_graph (@{$ref_params->{'graphs'}})
   {
-    my ($name, $min, $max) = split(/:/, $row);
-    push @rows, sprintf('DS:%s:%s:%d:%s:%s', $name, $type, 6*$base_step, $min, $max);
+    push @rows, sprintf('DS:%s:%s:%d:%s', $ref_graph->{'row'}, $type, 6*$base_step, $ref_graph->{'data_range'});
   }
 
   my @resolutions;
