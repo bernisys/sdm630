@@ -16,17 +16,22 @@ use lib "lib";
 use sdm630;
 
 my $OUTPUT='/home/user/berni/public_html/powermeter';
+my $file = shift || 'sdm630.conf';
+my $ref_config = SDM630::read_config($file);
 
 my %GRAPHS = SDM630::get_graph_list();
 
-
-generate_diagrams(@ARGV);
+foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
+  generate_diagrams($ref_device->{'TYPE'}, $ref_device->{'NAME'}, @ARGV);
+}
 
 exit 0;
 
 
 
 sub generate_diagrams {
+  my $type = shift;
+  my $name = shift;
   my @which = @_;
 
   @which = sort keys %{$GRAPHS{'diagrams'}} if (! @which);
@@ -38,16 +43,21 @@ sub generate_diagrams {
   if (! -d $subdir) {
     mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
   }
+  $subdir .= '/'.$name;
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
 
   foreach my $diagram (@which)
   {
-    print "generating: $diagram\n";
     my $ref_diagram = $GRAPHS{'diagrams'}{$diagram};
+    next if (!exists $ref_diagram->{'availability'}{$type});
 
+    print "generating: $name ($type) $diagram\n";
 
     foreach my $timespan (@{$ref_diagram->{'times'}})
-    {
-      print "$diagram / $timespan\n";
+    {   
+      printf("  graph %s %".$maxlen_timespan."s ", $diagram, $timespan);
       my $ref_timespan = $GRAPHS{'times'}{$timespan};
       my $basename = $subdir.'/'.$diagram.'-'.$timespan;
 
@@ -86,9 +96,14 @@ sub generate_diagrams {
         $headings .= $consolidation{$consol}{'heading'};
       }
       push @graph, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
+
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
         next if (exists $ref_graph->{'hide'});
+        my $ref_typeinfo = $ref_diagram->{'availability'}{$type};
+        if (ref $ref_typeinfo eq "HASH") {
+          next if (!exists $ref_typeinfo->{$ref_graph->{'row'}});
+        }
         my $row = $ref_graph->{'row'};
         my @gprint;
         my $con = 0;
@@ -121,7 +136,7 @@ sub generate_diagrams {
         push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
 
-      print join("\n", @def, @vdef, @graph, "");
+      #print join("\n", '', @def, @vdef, @graph, '');
       my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
       my $error = RRDs::error();
       if ($error)
@@ -132,9 +147,8 @@ sub generate_diagrams {
       {
         chmod 0644, $basename.'.tmp.png';
         rename $basename.'.tmp.png', $basename.'.png';
-        printf("size: %".$maxlen_timespan."s = %8dx%4d\n", $timespan, $xsize, $ysize);
+        printf("  (%4dx%4d) => %s.png\n", $xsize, $ysize, $basename);
       }
-      print "\n";
     }
     print "-----\n";
   }
