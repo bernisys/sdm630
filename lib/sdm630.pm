@@ -95,15 +95,16 @@ my %GRAPHS = (
       'unit' => 'V', 'title' => 'Voltage L-N',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 230, 'color' => '0000ff' },
+        { 'height' => 230, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
+        'SDM72' => 1,
         'SDM630' => 1,
       }
     },
@@ -112,13 +113,13 @@ my %GRAPHS = (
       'unit' => 'V', 'title' => 'Voltage L-L',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'avg',  'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
-        { 'row' => 'L1L2', 'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L2L3', 'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
-        { 'row' => 'L3L1', 'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:270', 'minmax' => 'no', },
+        { 'row' => 'L1L2', 'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:430', 'minmax' => 'no', },
+        { 'row' => 'L2L3', 'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:430', 'minmax' => 'no', },
+        { 'row' => 'L3L1', 'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:430', 'minmax' => 'no', },
+        { 'row' => 'avg',  'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:430', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 230, 'color' => '0000ff' },
+        { 'height' => 230, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -130,12 +131,12 @@ my %GRAPHS = (
       'unit' => 'A', 'title' => 'Current',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
-        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
         { 'row' => 'N',   'color' => $COLORS{'N'},   'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -174,7 +175,7 @@ my %GRAPHS = (
       'min' => 49.9, 'max' => 50.1,
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'Hz',  'color' => '000000', 'style' => 'LINE1', 'data_range' => '30:70', 'minmax' => 'yes', },
+        { 'row' => 'Hz',  'color' => $COLORS{'default'}, 'style' => 'LINE1', 'data_range' => '30:70', 'minmax' => 'yes', },
       ],
       'lines' => [
         { 'height' => 51.5,  'color' => '0000a0', 'legend' => 'solar power total disablement\n' },
@@ -201,13 +202,15 @@ my %GRAPHS = (
       'unit' => 'W', 'title' => 'Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
+        { 'row' => 'imp', 'color' => $COLORS{'in'},  'Style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
+        { 'row' => 'exp', 'color' => $COLORS{'out'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -219,11 +222,11 @@ my %GRAPHS = (
       'unit' => 'W', 'title' => 'Power Demand',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
+        { 'row' => 'max', 'color' => $COLORS{'max'},     'style' => 'LINE2', 'data_range' => '0:60000', 'minmax' => 'no', 'hide' => 'true', },
+        { 'row' => 'tot', 'color' => $COLORS{'default'}, 'style' => 'LINE1', 'data_range' => '0:60000', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -234,11 +237,11 @@ my %GRAPHS = (
       'unit' => 'VA', 'title' => 'Power Demand',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => '000000', 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
-        { 'row' => 'max', 'color' => 'a00000', 'style' => 'LINE2', 'data_range' => '-60000:60000', 'minmax' => 'no', 'hide' => 'true', },
+        { 'row' => 'max', 'color' => $COLORS{'max'},     'style' => 'LINE2', 'data_range' => '0:60000', 'minmax' => 'no', 'hide' => 'true', },
+        { 'row' => 'tot', 'color' => $COLORS{'default'}, 'style' => 'LINE1', 'data_range' => '0:60000', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -249,13 +252,13 @@ my %GRAPHS = (
       'unit' => 'Var', 'title' => 'Reactive Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -267,13 +270,13 @@ my %GRAPHS = (
       'unit' => 'VA', 'title' => 'Apparent Power',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-20000:20000', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-60000:60000', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -285,13 +288,13 @@ my %GRAPHS = (
       'unit' => '', 'title' => 'Power Factor',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-1:1', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-1:1', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM72' => 1,
@@ -303,13 +306,13 @@ my %GRAPHS = (
       'unit' => '°', 'title' => 'Phase Angle',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
         { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
         { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'sum', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 0, 'color' => '0000ff' },
+        { 'height' => 0, 'color' => $COLORS{'normal'} },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -320,7 +323,7 @@ my %GRAPHS = (
       'unit' => 'kVAh', 'title' => 'Apparent Energy Total',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot',  'color' => '000000', 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot',  'color' => $COLORS{'default'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -331,10 +334,10 @@ my %GRAPHS = (
       'unit' => 'kWh', 'title' => 'Energy Import',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM72' => { 'tot' => 1, },
@@ -346,10 +349,10 @@ my %GRAPHS = (
       'unit' => 'kWh', 'title' => 'Energy Export',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM72' => { 'tot' => 1, },
@@ -361,10 +364,24 @@ my %GRAPHS = (
       'unit' => 'kWh', 'title' => 'Energy Total',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
+      ],
+      'availability' => {
+        'SDM72' => { 'tot' => 1, },
+        'SDM630' => { 'tot' => 1, 'L1' => 1, 'L2' => 1, 'L3' => 1, },
+      }
+    },
+    'energy_kwh_periodic' => {
+      'type' => 'GAUGE',
+      'unit' => 'kWh', 'title' => 'Energy Total',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'imp', 'color' => $COLORS{'in'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'exp', 'color' => $COLORS{'out'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM72' => { 'tot' => 1, },
@@ -376,10 +393,10 @@ my %GRAPHS = (
       'unit' => 'kVarh', 'title' => 'Reactive Energy Import',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -390,10 +407,10 @@ my %GRAPHS = (
       'unit' => 'kVarh', 'title' => 'Reactive Energy Export',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM630' => 1,
@@ -404,14 +421,53 @@ my %GRAPHS = (
       'unit' => 'kVarh', 'title' => 'Reactive Energy Total',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '-360:360', 'minmax' => 'yes', },
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '-360:360', 'minmax' => 'no', },
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+        { 'row' => 'tot', 'color' => $COLORS{'sum'}, 'style' => 'LINE1', 'data_range' => '0:U', 'minmax' => 'yes', },
       ],
       'availability' => {
         'SDM72' => { 'tot' => 1, },
         'SDM630' => { 'tot' => 1, 'L1' => 1, 'L2' => 1, 'L3' => 1, },
+      }
+    },
+    'thd_voltage_l' => {
+      'type' => 'GAUGE',
+      'unit' => '%', 'title' => 'Voltage distortion',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:110', 'minmax' => 'yes', },
+      ],
+      'availability' => {
+        'SDM630' => 1,
+      }
+    },
+    'thd_current' => {
+      'type' => 'GAUGE',
+      'unit' => '%', 'title' => 'Current distortion',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:110', 'minmax' => 'no', },
+        { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:110', 'minmax' => 'yes', },
+      ],
+      'availability' => {
+        'SDM630' => 1,
+      }
+    },
+    'charge' => {
+      'type' => 'GAUGE',
+      'unit' => 'Ah', 'title' => 'Charge',
+      'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
+      'graphs' => [
+        { 'row' => 'Ah',  'color' => $COLORS{'def'}, 'style' => 'LINE2', 'data_range' => '0:U', 'minmax' => 'no', },
+      ],
+      'availability' => {
+        'SDM630' => 1,
       }
     },
   },
