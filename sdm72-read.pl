@@ -34,7 +34,7 @@ while (1==1) {
 
     SDM630::feed_rrds($ref_values, $ref_device->{'NAME'});
     if ($ref_device->{'TYPE'} eq 'SDM630') {
-      SDM630::feed_rrds($ref_values);
+      SDM630::feed_rrds($ref_values, 'test');
     }
   }
   $ref_client->disconnect;

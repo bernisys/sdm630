@@ -81,14 +81,11 @@ my %GRAPHS = (
     'year'    => { 'start' => -366*86400,   'step' => 43200, 'func' => ['min', 'avg', 'max'] },
     '5year'   => { 'start' => -5*366*86400, 'step' => 43200, 'func' => ['min', 'avg', 'max'] },
   },
-#  'rrd_param' => { 'charge'         => { 'type' => 'COUNTER', 'rows' => ['Ah:0:U', ], }, },
-  'html' => {
-    'sections' => [
-      { 'heading' => 'Phase parameters', 'graphs' => [ 'frequency', 'voltage', 'current', 'phi', ], },
-      { 'heading' => 'Power',            'graphs' => [ 'power_w', 'power_var', 'power_va', 'power_w_demand', 'powerfactor', ], },
-      { 'heading' => 'Energy',           'graphs' => [ 'energy', 'energy_kwh', 'energy_kvarh', ], },
-    ],
-  },
+  'sections' => [
+    { 'heading' => 'Phase parameters', 'graphs' => [ 'frequency', 'voltage_l', 'voltage_ll', 'current', 'current_demand', 'current_demandmax', 'phi', ], },
+    { 'heading' => 'Power',            'graphs' => [ 'power_w', 'power_var', 'power_va', 'power_w_demand', 'power_va_demand', 'powerfactor', ], },
+    { 'heading' => 'Energy',           'graphs' => [ 'energy_kwh_import', 'energy_kwh_export', 'energy_kwh_total', 'energy_kvah_total', 'energy_kvarh_import', 'energy_kvarh_export', 'energy_kvarh_total', ], },
+  ],
   'diagrams' => {
     'voltage_l' => {
       'type' => 'GAUGE',
@@ -807,6 +804,97 @@ sub create_rrd {
 
 sub get_graph_list {
   return %GRAPHS;
+}
+
+
+sub generate_indexes {
+  my $subdir = shift;
+  my $type = shift;
+  my $name = shift;
+
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
+  $subdir .= '/'.$name;
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
+
+  my @times = sort { length($b) <=> length($a) } (keys %{$GRAPHS{'times'}});
+  my $maxlen_timespan = length((sort { length($b) <=> length($a) } @times)[0]);
+
+  my %indexdata;
+
+  # prepare main index data for all timespans and for main index and summary
+  foreach my $timespan ('all', '', keys %{$GRAPHS{'times'}}) {
+    push @{$indexdata{$name}{$timespan}{'header'}}, (
+      '<html>',
+      '<head>',
+      '  <title>'.$name.' ('.$type.') </title>',
+      '  <!meta name="" content="">',
+      '  <meta charset="utf-8"> '
+    );
+
+    if ($timespan !~ /^_/) {
+      push @{$indexdata{$name}{$timespan}{'header'}}, (
+        '  <meta http-equiv="refresh" content="30; URL=index-'.$timespan.'.html">',
+      );
+    }
+    push @{$indexdata{$name}{$timespan}{'header'}}, (
+      '</head>',
+      '<body>',
+    );
+    push @{$indexdata{$name}{$timespan}{'footer'}}, (
+      '</body>',
+      '</html>',
+    );
+  }
+
+  foreach my $ref_section (@{$GRAPHS{'sections'}}) {
+    my $heading = '<h1>'.$ref_section->{'heading'}.'</h1>';
+    foreach my $graph (@{$ref_section->{'graphs'}}) {
+      my $ref_diagram = $GRAPHS{'diagrams'}{$graph};
+      next if (!exists $ref_diagram->{'availability'}{$type});
+      foreach my $timespan (@{$ref_diagram->{'times'}}) {
+        if (defined $heading) {
+          push @{$indexdata{$name}{$timespan}{'body'}}, $heading;
+        }
+      }
+      if (defined $heading) {
+        push @{$indexdata{$name}{'all'}{'body'}}, $heading;
+      }
+      $heading = undef;
+      foreach my $timespan (@{$ref_diagram->{'times'}}) {
+        push @{$indexdata{$name}{$timespan}{'body'}}, '<img src="'.$graph.'-'.$timespan.'.png">';
+        push @{$indexdata{$name}{'all'}{'body'}}, '<img src="'.$graph.'-'.$timespan.'.png">';
+      }
+      push @{$indexdata{$name}{'all'}{'body'}}, '<br>';
+    }
+  }
+
+  push @{$indexdata{$name}{''}{'body'}}, '';
+
+  #print Dumper(\%indexdata);
+
+  foreach my $unit (sort keys %indexdata) {
+    print "$unit\n";
+    foreach my $timespan (sort keys %{$indexdata{$unit}}) {
+      print "  $timespan\n";
+      my $ref_sections = $indexdata{$unit}{$timespan};
+
+      if ($timespan ne '') {
+        $timespan = '-'.$timespan;
+      }
+      my $file = $subdir.'/index'.$timespan.'.html';
+      print $file,"\n";
+  print Dumper($ref_sections);
+      open my $h_file, '>', $file;
+      foreach my $section ('header', 'body', 'footer') {
+        print $h_file join('', @{$ref_sections->{$section}});
+      }
+      close $h_file;
+    }
+  }
 }
 
 
