@@ -930,7 +930,22 @@ sub generate_indexes {
     }
   }
 
-  push @{$indexdata{$name}{''}{'body'}}, '';
+  push @{$indexdata{$name}{''}{'body'}}, (
+    '  <table>',
+    '    <tr>',
+  );
+  foreach my $timespan (@{$GRAPHS{'time_order'}}) {
+    push @{$indexdata{$name}{''}{'body'}}, (
+      '      <td>',
+      '        <a href="index-'.$timespan.'.html"><h1>'.$GRAPHS{'times'}{$timespan}{'heading'}.'</h1></a>',
+      '        <iframe width="710px" height="970px" src="index-'.$timespan.'.html"></iframe>',
+      '      </td>',
+    );
+  }
+  push @{$indexdata{$name}{''}{'body'}}, (
+    '    </tr>',
+    '  </table>',
+  );
 
   #print Dumper(\%indexdata);
 
