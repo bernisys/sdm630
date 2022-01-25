@@ -38,10 +38,11 @@ while (1==1) {
 
     print "\n";
   }
-  my $now = time;
-  my $sleeptime = $now - int($now/10)*10;
+  my $sleeptime = 10 - time % 10;
   print "$sleeptime\n";
   sleep $sleeptime;
 }
+
 $ref_client->disconnect;
+
 
