@@ -26,7 +26,7 @@ while (1==1) {
   foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
     printf("%s (%s)\n", $ref_device->{'NAME'}, $ref_device->{'TYPE'});
     my $ref_values = SDM630::retrieve_all($ref_client, $ref_device->{'UNIT'}, $ref_device->{'TYPE'});
-    SDM630::output_values($ref_values);
+    print SDM630::output_values($ref_values);
     $values{$ref_device->{'UNIT'}} = {
       'type' => $ref_device->{'TYPE'},
       'data' => $ref_values,

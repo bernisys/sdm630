@@ -650,13 +650,14 @@ sub output_values {
   my $ref_values = shift;
   my $path = shift || '';
 
+  my @lines;
   my $string = '';
   foreach my $key (sort keys %{$ref_values})
   {
     if (ref $ref_values->{$key} eq 'HASH')
     {
-      output_values($ref_values->{$key}, $path.' '.$key);
       # descend into sub hash
+      push @lines, output_values($ref_values->{$key}, $path.' '.$key);
     }
     else
     {
@@ -664,7 +665,8 @@ sub output_values {
       $string .= sprintf('%5s: %9.2f   ', $key, $ref_values->{$key});
     }
   }
-  printf("%-20s %s\n", $path, $string) if ($string ne '');
+  push @lines, sprintf("%-20s %s\n", $path, $string) if ($string ne '');
+  return join('', @lines);
 }
 
 
