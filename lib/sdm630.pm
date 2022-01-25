@@ -18,7 +18,7 @@ use RRDs;
 my $DEBUG = 0;
 
 my @RRD_RESOLUTIONS = ( '12H@10S', '14d@1M', '4w@10M', '6m@1H', '5y@12H', );
-my $RRD_STEP = 10;
+my $RRD_STEP = 10; # 10 seconds per primary data point
 
 
 # TODO:  find best brown value for L1
