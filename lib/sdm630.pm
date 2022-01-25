@@ -826,6 +826,7 @@ sub create_rrd {
   {
     push @rows, sprintf('DS:%s:%s:%d:%s', $ref_graph->{'row'}, $type, 6*$base_step, $ref_graph->{'data_range'});
   }
+  #print join(" - ", @rows), "\n";
 
   my @resolutions;
   my $count = 0;
@@ -879,7 +880,7 @@ sub generate_indexes {
   }
 
   my @times = sort { length($b) <=> length($a) } (keys %{$GRAPHS{'times'}});
-  my $maxlen_timespan = length((sort { length($b) <=> length($a) } @times)[0]);
+  my $maxlen_timespan = $times[0];
 
   my %indexdata;
 
@@ -892,8 +893,7 @@ sub generate_indexes {
       '  <!meta name="" content="">',
       '  <meta charset="utf-8"> '
     );
-
-    if ($timespan !~ /^_/) {
+    if ($timespan ne '') {
       push @{$indexdata{$name}{$timespan}{'header'}}, (
         '  <meta http-equiv="refresh" content="30; URL=index-'.$timespan.'.html">',
       );
