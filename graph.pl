@@ -34,6 +34,11 @@ sub generate_diagrams {
   my $maxlen_diagram = length((sort { length($b) <=> length($a) } @which)[0]);
   my $maxlen_timespan = length((sort { length($b) <=> length($a) } (keys %{$GRAPHS{'times'}}))[0]);
 
+  my $subdir = $OUTPUT;
+  if (! -d $subdir) {
+    mkdir $subdir or warn "WARNING: Failed to create output folder: $subdir\n";
+  }
+
   foreach my $diagram (@which)
   {
     print "generating: $diagram\n";
