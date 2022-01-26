@@ -961,7 +961,7 @@ sub generate_diagrams {
         '--alt-y-grid',
         #'--vertical-label', '', # TODO: add unit here
         '--font', 'TITLE:13',
-        '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
+        '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') '.$name.' last '.$timespan,
       );
 
       push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
