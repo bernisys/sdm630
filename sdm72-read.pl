@@ -18,6 +18,9 @@ use sdm630;
 my $file = shift || 'sdm630.conf';
 my $ref_config = SDM630::read_config($file);
 
+$SIG{CHLD} = \&REAPER;
+
+# TODO: catch connection timeout error and retry the connection
 while (1==1) {
   my $now = qx/date/;
   chomp $now;
@@ -50,6 +53,20 @@ while (1==1) {
     }
   }
 
+  # TODO: every 900 seconds / integrate into the "5-min-section"
+    if ((time % 900) < 10) {
+      my $pid = fork();
+      if ($pid == 0) {
+        print "Forked - starting diagram generator...\n";
+        foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
+          SDM630::generate_diagrams($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
+        }
+        exit 0;
+      } else {
+        print "Forked graph creation (PID=$pid)\n";
+      }
+    }
+  # every 5 minutes, generate a new summary file with all current readings
   if ((time % 300) < 10) {
     open(my $h_file, '>', 'web/readings.txt');
     print $h_file $now, "\n", @output;
@@ -59,6 +76,17 @@ while (1==1) {
   print join('', $now, "\n", @output, $sleeptime, "\n");
 
   sleep $sleeptime;
+}
+
+
+use POSIX ":sys_wait_h";
+
+sub REAPER {
+  local $!;   # don't let waitpid() overwrite current error
+  while ((my $pid = waitpid(-1, WNOHANG)) > 0 && WIFEXITED($?)) {
+    print "reaped $pid" . ($? ? " with exit $?" : "");
+  }
+  $SIG{CHLD} = \&REAPER;  # loathe SysV
 }
 
 
