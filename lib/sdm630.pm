@@ -704,6 +704,7 @@ sub feed_rrds {
   my $subdir = shift;
   my $hierarchy = shift || '';
 
+  my @result;
   my %values = ();
   foreach my $key (sort keys %{$ref_values})
   {
@@ -744,19 +745,22 @@ sub feed_rrds {
     #print "updating $fullpath with: $update_pattern / $update_values\n";
 
     if (! -f $fullpath) {
-      warn("RRD create: $fullpath\n");
+      push @result, "RRD create: $fullpath";
       my $ref_param = $GRAPHS{'diagrams'}{$name};
       $ref_param->{'name'} = $name;
-      create_rrd($subdir, $ref_param);
-      return;
+      my $result = create_rrd($subdir, $ref_param);
+      if (defined $result) {
+        push @result, $result;
+      }
     }
 
     RRDs::update($fullpath, '--template', $update_pattern, "N:".$update_values);
     my $error = RRDs::error();
     if ($error) {
-      warn("RRDs error: $name / $error\n");
+      push @result, ("RRDs error: $name / $error");
     }
   }
+  return @result;
 }
 
 
@@ -803,9 +807,10 @@ sub create_rrd {
     RRDs::create($fullpath, '--step', $base_step, @rows, @resolutions);
     my $error = RRDs::error();
     if ($error) {
-      warn("RRDs error: $error\n");
+      return "RRDs error: $error";
     }
   }
+  return undef;
 }
 
 

@@ -32,9 +32,9 @@ while (1==1) {
 
     push @output, sprintf("%s (%s)\n", $ref_device->{'NAME'}, $ref_device->{'TYPE'}), SDM630::output_values($ref_values), "\n";
 
-    SDM630::feed_rrds($ref_values, $ref_device->{'NAME'});
+    push @output, SDM630::feed_rrds($ref_values, $ref_device->{'NAME'});
     if ($ref_device->{'TYPE'} eq 'SDM630') {
-      SDM630::feed_rrds($ref_values, 'test');
+      push @output, SDM630::feed_rrds($ref_values, 'test');
     }
   }
   $ref_client->disconnect;
