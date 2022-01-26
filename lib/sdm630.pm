@@ -358,7 +358,7 @@ my %GRAPHS = (
       ],
       'availability' => {
         'SDM72' => { 'tot' => 1, },
-        'SDM630' => { 'tot' => 1, 'L1' => 1, 'L2' => 1, 'L3' => 1, },
+        'SDM630' => { 'tot' => 1, 'imp' => 1, 'exp' => 1, },
       }
     },
     'energy_kvarh_import' => {
