@@ -1002,6 +1002,7 @@ sub generate_diagrams {
       push @legend_top, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
 
       my @graph;
+      my $first_row = '';
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
         my @this_graph;
@@ -1011,6 +1012,7 @@ sub generate_diagrams {
           next if (!exists $ref_typeinfo->{$ref_graph->{'row'}});
         }
         my $row = $ref_graph->{'row'};
+        $first_row = $row.'_avg' if ($first_row eq '');
         my @gprint;
         my $con = 0;
         for my $consol (@{$ref_timespan->{'func'}})
@@ -1020,6 +1022,7 @@ sub generate_diagrams {
           push @gprint, sprintf('GPRINT:%s:%s', $row.'_'.$consol.$consol, '%6.2lf%S');
           $con++ if (($consol eq "min") or ($consol eq "max"));
         }
+        
         if (($ref_graph->{'minmax'} eq 'yes') and ($con >= 2))
         {
           # min/max area: draw an invisible "*_min" and stack "*_max - *_min" onto it
@@ -1036,6 +1039,13 @@ sub generate_diagrams {
           push @graph, @this_graph;
         }
       }
+
+      # BEPI
+      #push @def, "TICK:$first_row#00ff0010:1.0:Nonzero Data";
+      push @def, (
+        'CDEF:un='.$first_row.',0,*,0,EQ,0,1,IF',
+        'TICK:un#ffe8e8:1.0',
+      );
 
       my @lines;
       foreach my $ref_line (@{$ref_diagram->{'lines'}})
