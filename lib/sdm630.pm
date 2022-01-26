@@ -999,6 +999,7 @@ sub generate_diagrams {
       my @graph;
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
+        my @this_graph;
         next if (exists $ref_graph->{'hide'});
         my $ref_typeinfo = $ref_diagram->{'availability'}{$type};
         if (ref $ref_typeinfo eq "HASH") {
@@ -1018,11 +1019,17 @@ sub generate_diagrams {
         {
           # min/max area: draw an invisible "*_min" and stack "*_max - *_min" onto it
           push @def, sprintf('CDEF:%s_diff=%s_max,%s_min,-', $row, $row, $row);
-          push @graph, 'AREA:'.$row.'_min#ffffff';
-          push @graph, 'AREA:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7).'::STACK';
+          push @this_graph, 'AREA:'.$row.'_min#ffffff';
+          push @this_graph, 'AREA:'.$row.'_diff#'.brighten($ref_graph->{'color'}, 0.7).'::STACK';
         }
-        push @graph, sprintf('%s:%s_avg#%s:%-'.$maxlen_row.'s', $ref_graph->{'style'}, $row, $ref_graph->{'color'}, $row);
-        push @graph, @gprint, 'COMMENT:\n';
+        push @this_graph, sprintf('%s:%s_avg#%s:%-'.$maxlen_row.'s', $ref_graph->{'style'}, $row, $ref_graph->{'color'}, $row);
+        push @this_graph, @gprint, 'COMMENT:\n';
+
+        if ((exists $ref_graph->{'minmax'}) and ($ref_graph->{'minmax'} eq 'yes')) {
+          unshift @graph, @this_graph;
+        } else {
+          push @graph, @this_graph;
+        }
       }
 
       my @lines;
