@@ -968,9 +968,19 @@ sub generate_diagrams {
       push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
       push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
 
+      my @localtime = localtime();
+      $localtime[4]++;
+      $localtime[5] += 1900;
+      my $time = sprintf("%02d\\:%02d\\:%02d", $localtime[2], $localtime[1], $localtime[0]);
+      my $date = sprintf("%02d-%02d-%02d", $localtime[5], $localtime[4], $localtime[3]);
+      my $date_time = $date.' '.$time;
+
       my @def;
       my @vdef;
-      my @graph = ( 'TEXTALIGN:left' );
+      my @legend_top = (
+        'TEXTALIGN:left',
+        'COMMENT:'.$date_time."\\n",
+      );
       my $maxlen_row = length((sort { length($b->{'row'}) <=> length($a->{'row'}) } (@{$ref_diagram->{'graphs'}}))[0]{'row'});
 
       my $headings;
@@ -985,8 +995,9 @@ sub generate_diagrams {
       {
         $headings .= $consolidation{$consol}{'heading'};
       }
-      push @graph, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
+      push @legend_top, 'COMMENT:'.(' ' x $maxlen_row).$headings.'\n';
 
+      my @graph;
       foreach my $ref_graph (@{$ref_diagram->{'graphs'}})
       {
         next if (exists $ref_graph->{'hide'});
@@ -1026,8 +1037,8 @@ sub generate_diagrams {
         push @lines, $line; ## 'HRULE:'.$ref_line->{'height'}.'#'.$ref_line->{'color'};
       }
 
-      #print join("\n", '', @def, @vdef, @graph, '');
-      my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @graph, @lines);
+      #print join("\n", '', @def, @vdef, @legend_top, @graph, '');
+      my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @legend_top, @graph, @lines);
       my $error = RRDs::error();
       if ($error)
       {
