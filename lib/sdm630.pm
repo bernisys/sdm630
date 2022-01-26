@@ -961,6 +961,7 @@ sub generate_diagrams {
         '--alt-y-grid',
         #'--vertical-label', '', # TODO: add unit here
         '--font', 'TITLE:13',
+        '--force-rules-legend', # make sure all HRULE/VRULE are described in the legend, even if they are invisible due to graph scaling
         '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') '.$name.' last '.$timespan,
       );
 
