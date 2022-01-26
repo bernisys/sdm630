@@ -44,6 +44,11 @@ while (1==1) {
   $ref_client->disconnect;
   print "\n";
 
+  foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
+    if (! -f $ref_config->{'WEBDIR'}.'/'.$ref_device->{'NAME'}.'/index.html') {
+      SDM630::generate_indexes($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
+    }
+  }
 
   if ((time % 300) < 10) {
     open(my $h_file, '>', 'web/readings.txt');
