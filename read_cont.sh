@@ -3,7 +3,7 @@
 while true ; do
   SEC=$(($(date +%s) % 10))
   if [ "$SEC" = "0" ] ; then
-    date
+    echo "Starting script - $(date)"
     ./sdm72-read.pl
     echo
   fi
