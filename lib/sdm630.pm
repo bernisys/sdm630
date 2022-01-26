@@ -838,7 +838,7 @@ sub generate_indexes {
   my %indexdata;
 
   # prepare main index data for all timespans and for main index and summary
-  foreach my $timespan ('all', '', keys %{$GRAPHS{'times'}}) {
+  foreach my $timespan ('all', '', @times) {
     push @{$indexdata{$name}{$timespan}{'header'}}, (
       '<html>',
       '<head>',
