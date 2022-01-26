@@ -956,7 +956,7 @@ sub generate_diagrams {
 
       # TODO: add color scheme using: '--color', 'COLORTAG#rrggbb[aa]',
       my @params = (
-        $basename.'.tmp.png',
+        $basename.'.png',
         '--start', $ref_timespan->{'start'},
         '--width', $GRAPHS{'base'}{'width'},
         '--height', $GRAPHS{'base'}{'height'},
@@ -1051,14 +1051,9 @@ sub generate_diagrams {
       #print join("\n", '', @def, @vdef, @legend_top, @graph, '');
       my ($result_arr, $xsize, $ysize) = RRDs::graph(@params, @def, @vdef, @legend_top, @graph, @lines);
       my $error = RRDs::error();
-      if ($error)
-      {
+      if ($error) {
         warn "ERROR: ".$error;
-      }
-      else
-      {
-        chmod 0644, $basename.'.tmp.png';
-        rename $basename.'.tmp.png', $basename.'.png';
+      } else {
         printf("  (%4dx%4d) => %s.png\n", $xsize, $ysize, $basename);
       }
     }
