@@ -769,19 +769,6 @@ sub create_rrd {
   my $ref_rows = $ref_params->{'rows'};
   my $ref_resolutions = \@RRD_RESOLUTIONS;
 
-  # TODO: change source hash:
-  #
-  # old format:
-  #    'current_demand' => { 'type' => 'GAUGE', 'unit' => 'A',                              'rows' => ['L1:0:100', 'L2:0:100', 'L3:0:100', ], },
-  #
-  # new format:
-  #    'current_demand' => { 'type' => 'GAUGE', 'unit' => 'A', 'title' => 'Current demand', 'graphs' => [
-  #        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-  #        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-  #        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-  #      ],
-  #    },
-
   my @rows;
   foreach my $ref_graph (@{$ref_params->{'graphs'}})
   {
@@ -962,6 +949,7 @@ sub generate_diagrams {
       my $ref_timespan = $GRAPHS{'times'}{$timespan};
       my $basename = $subdir.'/'.$diagram.'-'.$timespan;
 
+      # TODO: add color scheme using: '--color', 'COLORTAG#rrggbb[aa]',
       my @params = (
         $basename.'.tmp.png',
         '--start', $ref_timespan->{'start'},
