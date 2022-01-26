@@ -959,6 +959,7 @@ sub generate_diagrams {
         '--slope-mode',
         '--alt-autoscale',
         '--alt-y-grid',
+        #'--vertical-label', '', # TODO: add unit here
         '--font', 'TITLE:13',
         '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') last '.$timespan,
       );
