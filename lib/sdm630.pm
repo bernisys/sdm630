@@ -990,7 +990,6 @@ sub generate_diagrams {
         'avg' => { 'heading' => '   Average', 'func' => "AVERAGE", 'func-vdef' => "AVERAGE", },
         'max' => { 'heading' => '   Maximum', 'func' => "MAX",     'func-vdef' => "MAXIMUM", },
       );
-      # 'consolidation' => { 'cur' => 'LAST', 'min' => 'MINIMUM', 'avg' => 'AVERAGE', 'max' => 'MAXIMUM', },
       for my $consol (@{$ref_timespan->{'func'}})
       {
         $headings .= $consolidation{$consol}{'heading'};
