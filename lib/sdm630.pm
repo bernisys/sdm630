@@ -58,12 +58,12 @@ my %GRAPHS = (
     '5year'   => { 'heading' => '5 years',  'start' => -5*366*86400, 'step' => 43200, 'func' => ['min', 'avg', 'max'] },
   },
   'sections' => [
-    { 'heading' => 'Phase parameters', 'graphs' => [ 'frequency', 'voltage_l', 'voltage_ll', 'current', 'current_demand', 'current_demandmax', 'phi', ], },
+    { 'heading' => 'Phase parameters', 'graphs' => [ 'frequency', 'voltage_ln', 'voltage_ll', 'current', 'current_demand', 'current_demandmax', 'phi', ], },
     { 'heading' => 'Power',            'graphs' => [ 'power_w', 'power_var', 'power_va', 'power_w_demand', 'power_va_demand', 'powerfactor', ], },
     { 'heading' => 'Energy',           'graphs' => [ 'energy_kwh_import', 'energy_kwh_export', 'energy_kwh_total', 'energy_kvah_total', 'energy_kvarh_import', 'energy_kvarh_export', 'energy_kvarh_total', ], },
   ],
   'diagrams' => {
-    'voltage_l' => {
+    'voltage_ln' => {
       'type' => 'GAUGE',
       'unit' => 'V', 'title' => 'Voltage L-N',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
@@ -404,7 +404,7 @@ my %GRAPHS = (
         'SDM630' => { 'tot' => 1, 'L1' => 1, 'L2' => 1, 'L3' => 1, },
       }
     },
-    'thd_voltage_l' => {
+    'thd_voltage_ln' => {
       'type' => 'GAUGE',
       'unit' => '%', 'title' => 'Voltage distortion',
       'times' => ['day', 'week', 'month', '3month', '6month', 'year', '5year', ],
@@ -461,11 +461,11 @@ sub retrieve_all {
   if ($type eq "SDM630") {
     # retrieve all 3-phase reated values
     SDM630::retrieve($ref_client, $unit,   0, 3, [
-        'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
+        'Voltage_LN', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 117, 3, [
-        'THD_Voltage_L', 'THD_Current',
+        'THD_Voltage_LN', 'THD_Current',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 129, 3, [
@@ -483,7 +483,7 @@ sub retrieve_all {
 
     # then add all single values (sums, averages, energies, ... not phase-related)
     SDM630::retrieve($ref_client, $unit,  21, 1, [
-        'Voltage_L_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        'Voltage_LN_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
         'Power_Var_sum', 'PowerFactor_sum', '_32', 'phi_sum', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
         'Energy_kVAh_Total_tot', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
       ], $ref_values);
@@ -497,7 +497,7 @@ sub retrieve_all {
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 124, 1, [
-        'THD_Voltage_L_avg', 'THD_Current_avg',
+        'THD_Voltage_LN_avg', 'THD_Current_avg',
       ], $ref_values);
 
 # TODO: this value seems to be unknown by my SDM630 ...
@@ -512,12 +512,12 @@ sub retrieve_all {
   } elsif ($type eq "SDM72") {
     # retrieve all 3-phase reated values
     SDM630::retrieve($ref_client, $unit,   0, 3, [
-        'Voltage_L', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor',
+        'Voltage_LN', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor',
       ], $ref_values);
 
     # then add all single values
     SDM630::retrieve($ref_client, $unit,  21, 1, [
-        'Voltage_L_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        'Voltage_LN_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
         'Power_Var_sum', 'PowerFactor_sum', '_32', '_33', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot',
       ], $ref_values);
     SDM630::retrieve($ref_client, $unit, 100, 1, [
