@@ -92,7 +92,7 @@ while (1==1) {
     close($h_file);
   }
   my $sleeptime = 10 - time % 10;
-  print join('', $now, "\n", @output, $sleeptime, "\n");
+  print join('', $now, "\n", @output, 'sleep: '.$sleeptime.'s ... ');
 
   sleep $sleeptime;
 }
