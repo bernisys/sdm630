@@ -192,9 +192,12 @@ my %GRAPHS = (
       'unit' => 'A', 'title' => 'Current demand',
       'times' => ['hour', '6h', 'day', 'week', 'month', 'year', '5year', ],
       'graphs' => [
-        { 'row' => 'L1',  'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-        { 'row' => 'L2',  'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
-        { 'row' => 'L3',  'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L1',   'color' => $COLORS{'L1'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L2',   'color' => $COLORS{'L2'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        { 'row' => 'L3',   'color' => $COLORS{'L3'},  'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        ## TODO: test
+        #{ 'row' => 'N',    'color' => $COLORS{'N'},   'style' => 'LINE2', 'data_range' => '0:100', 'minmax' => 'no', },
+        #{ 'row' => 'Nmax', 'color' => $COLORS{'N'},   'style' => 'LINE1', 'data_range' => '0:100', 'minmax' => 'no', },
       ],
       'availability' => {
         'SDM630' => 1,
