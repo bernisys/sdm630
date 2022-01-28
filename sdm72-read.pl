@@ -27,7 +27,7 @@ while (1==1) {
   my %values;
   my $ref_client = Device::Modbus::TCP::Client->new(host => $ref_config->{'IP_ADDRESS'}, timeout => $ref_config->{'TIMEOUT'});
 
-  printf('@%s', $now);
+  printf("\n@%s", $now);
   my @output = ();
   foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
 
@@ -64,27 +64,29 @@ while (1==1) {
   $ref_client->disconnect;
   print "\n";
 
-  foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
-    if (! -f $ref_config->{'WEBDIR'}.'/'.$ref_device->{'NAME'}.'/index.html') {
-      SDM630::generate_indexes($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
+  if ((time % (60*$ref_config->{'INDEX_TIME'})) < 10) {
+    foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
+      if (! -f $ref_config->{'WEBDIR'}.'/'.$ref_device->{'NAME'}.'/index.html') {
+        SDM630::generate_indexes($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
+      }
     }
   }
 
-  # TODO: every 900 seconds / integrate into the "5-min-section"
-    if ((time % 900) < 10) {
-      my $pid = fork();
-      if ($pid == 0) {
-        print "Forked - starting diagram generator...\n";
-        foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
-          SDM630::generate_diagrams($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
-        }
-        exit 0;
-      } else {
-        print "Forked graph creation (PID=$pid)\n";
+  if ((time % (60*$ref_config->{'DIAGRAM_TIME'})) < 10) {
+    my $pid = fork();
+    if ($pid == 0) {
+      print "Forked - starting diagram generator...\n";
+      foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
+        SDM630::generate_diagrams($ref_config->{'WEBDIR'}, $ref_device->{'TYPE'}, $ref_device->{'NAME'});
       }
+      exit 0;
+    } else {
+      print "Forked graph creation (PID=$pid)\n";
     }
+  }
+
   # every 5 minutes, generate a new summary file with all current readings
-  if ((time % 300) < 10) {
+  if ((time % (60*$ref_config->{'SUMMARY_TIME'})) < 10) {
     open(my $h_file, '>', 'web/readings.txt');
     print $h_file $now, "\n", @output;
     close($h_file);
