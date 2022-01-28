@@ -1172,8 +1172,6 @@ sub generate_diagrams {
         }
       }
 
-      # BEPI
-      #push @def, "TICK:$first_row#00ff0010:1.0:Nonzero Data";
       push @def, (
         'CDEF:un='.$first_row.',0,*,0,EQ,0,1,IF',
         'TICK:un#ffe8e8:1.0',
