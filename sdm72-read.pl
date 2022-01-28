@@ -37,11 +37,11 @@ while (1==1) {
     };
 
     printf(" - %s (%s)", $ref_device->{'NAME'}, $ref_device->{'TYPE'});
-    push @output, sprintf("%s (%s)\n", $ref_device->{'NAME'}, $ref_device->{'TYPE'}), SDM630::output_values($ref_values), "\n";
-
-    push @output, SDM630::feed_rrds($ref_values, $ref_device->{'NAME'});
+    my $prefix = sprintf("%s - %-6s (%-6s) - ", $now, $ref_device->{'NAME'}, $ref_device->{'TYPE'});
+    push @output, prefix_lines($prefix, SDM630::output_values($ref_values));
+    push @output, prefix_lines($prefix, SDM630::feed_rrds($ref_values, $ref_device->{'NAME'}));
     if ($ref_device->{'TYPE'} eq 'SDM630') {
-      push @output, SDM630::feed_rrds($ref_values, 'test');
+      push @output, prefix_lines($prefix, SDM630::feed_rrds($ref_values, 'test'));
     }
   }
   $ref_client->disconnect;
@@ -90,4 +90,16 @@ sub REAPER {
 }
 
 
+
+sub prefix_lines {
+  my $prefix = shift;
+
+  my @output;
+  foreach my $line (@_) {
+    push @output, $prefix.$line;
+  }
+  return @output;
+}
+
+    
 

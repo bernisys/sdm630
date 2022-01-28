@@ -770,7 +770,7 @@ sub output_values {
     }
   }
   push @lines, sprintf("%-20s %s\n", $path, $string) if ($string ne '');
-  return join('', @lines);
+  return @lines;
 }
 
 
