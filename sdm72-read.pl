@@ -30,7 +30,24 @@ while (1==1) {
   printf('@%s', $now);
   my @output = ();
   foreach my $ref_device (@{$ref_config->{'DEVICE'}}) {
-    my $ref_values = SDM630::retrieve_all($ref_client, $ref_device->{'UNIT'}, $ref_device->{'TYPE'});
+
+    # data retrieval with some exception handling
+    my $ref_values;
+    eval {
+      $ref_values = SDM630::retrieve_all($ref_client, $ref_device->{'UNIT'}, $ref_device->{'TYPE'});
+      1;  # ok
+    } or do {
+      my $eval_error= $@ || "error";
+      warn "Warning: device connection lost - reconnecting ...\n";
+      eval {
+        $ref_client = Device::Modbus::TCP::Client->new(host => $ref_config->{'IP_ADDRESS'}, timeout => $ref_config->{'TIMEOUT'});
+        $ref_values = SDM630::retrieve_all($ref_client, $ref_device->{'UNIT'}, $ref_device->{'TYPE'});
+      } or do {
+        my $eval_error= $@ || "error";
+        print "ERROR: connection unstable.\n";
+      };  # needs a semicolon
+    };  # needs a semicolon
+
     $values{$ref_device->{'UNIT'}} = {
       'type' => $ref_device->{'TYPE'},
       'data' => $ref_values,
