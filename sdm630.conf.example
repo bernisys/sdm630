@@ -1,2 +1,22 @@
+# IP address and timeout setting for the modbus converter module
+#
 IP_ADDRESS=192.168.178.16
 TIMEOUT=2
+
+# device configuration section, list one or multiple devices using the format:
+# DEVICE=<name>,<type>,<modbus-address>
+#
+DEVICE=Main,SDM630,1
+DEVICE=Second,SDM72,5
+
+# web output folder
+#
+WEBDIR=/home/user/berni/public_html/powermeter
+
+# output file creation times in minutes
+#
+DIAGRAM_TIME=15
+INDEX_TIME=15
+SUMMARY_TIME=5
+
+
