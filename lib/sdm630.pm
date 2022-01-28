@@ -62,6 +62,77 @@ my %GRAPHS = (
     { 'heading' => 'Power',            'graphs' => [ 'power_w', 'power_var', 'power_va', 'power_w_demand', 'power_va_demand', 'powerfactor', ], },
     { 'heading' => 'Energy',           'graphs' => [ 'energy_kwh_import', 'energy_kwh_export', 'energy_kwh_total', 'energy_kvah_total', 'energy_kvarh_import', 'energy_kvarh_export', 'energy_kvarh_total', ], },
   ],
+  'registers' => {
+    'holding' => {
+      '40003', => { 'name' => 'Demand period', 'default' =>   60,
+        'availability' => {
+          'all'    => { 'values' => { '0'  => 'immediate', '5'  => '5 minutes', '8'  => '8 minutes', '10' => '10 minutes', '15' => '15 minutes', '20' => '20 minutes', '30' => '30 minutes', '60' => '60 minutes', }, },
+        },
+      },
+      '40011', => { 'name' => 'System type', 'default' =>    3,
+        'availability' => {
+          'all'    => { 'values' => { '3' => '3p4w', '2' => '3p3w', '1' => '1p2w', }, },
+        },
+      },
+      '40013', => { 'name' => 'Pulse 1 width', 'default' =>  100,
+        'availability' => {
+          'all'    => { 'values' => { '60'  => '60 ms', '100' => '100 ms', '200' => '200 ms', }, },
+        },
+      },
+      '40015' => { 'name' => 'password lock', 'default' => '1',
+        'availability' => {
+          'SDM630' => { 'values' => { '0' => 'locked', '1' => 'unlocked', }, },
+        },
+      },
+      '40019', => { 'name' => 'Parity / Stop', 'default' =>    0,
+        'availability' => {
+          'all'    => { 'values' => { '0' => 'no parity, 1 stop', '1' => 'even parity, 1 stop', '2' => 'odd parity, 1 stop', '3' => 'no parity, 2 stop', }, },
+        },
+      },
+      '40021', => { 'name' => 'Modbus address', 'default' =>    1,
+        'availability' => {
+          'all'    => { 'range'  => { 'min' => 1, 'max' => 247, }, },
+        },
+      },
+      '40023', => { 'name' => 'Pulse 1 rate', 'default' =>    0,
+        'availability' => {
+          'SDM630' => { 'values' => { '0' => '2.5Wh (400/kWh)', '1' => '10Wh  (100/kWh)', '2' => '100Wh (10/kWh)', '3' => '1kWh  (1/kWh)', '4' => '10kWh', '5' => '100kWh', }, },
+          'SDM72'  => { 'values' => { '0' => '1Wh (1000/kWh)',  '1' => '10Wh  (100/kWh)', '2' => '100Wh (10/kWh)', '3' => '1kWh  (1/kWh)', }, },
+        },
+      },
+      '40025', => { 'name' => 'Password', 'default' => 1000,
+        'availability' => {
+          'all'    => { 'range'  => { 'min' => '0000', 'max' => '9999', }, },
+        },
+      },
+      '40029', => { 'name' => 'Baud rate', 'default' =>    2,
+        'availability' => {
+          'SDM630' => { 'values' => { '0' => '2400', '1' => '4800', '2' => '9600', '3' => '19200', '4' => '38400', }, },
+          'SDM72'  => { 'values' => { '0' => '2400', '1' => '4800', '2' => '9600', '5' => '1200', }, },
+        },
+      },
+      '40059', => { 'name' => 'Scroll time', 'default' =>    3,
+        'availability' => {
+          'SDM72'  => { 'range'  => { 'min' => 0, 'max' => 60, }, 'values' => { '0' => 'static display' }, },
+        },
+      },
+      '40061', => { 'name' => 'backlight time', 'default' =>    0,
+        'availability' => {
+          'SDM72'  => { 'range'  => { 'min' => 0, 'max' => '120', }, },
+        },
+      },
+      '40087', => { 'name' => 'Pulse 1 energy type', 'default' =>    0,
+        'availability' => {
+          'SDM630' => { 'values' =>{ '1' => 'import active', '2' => 'total active', '4' => 'export active', '5' => 'import reactive', '6' => 'total reactive', '8' => 'export reactive', }, },
+        },
+      },
+      '46157', => { 'name' => 'reset', 'default' =>    0,
+        'availability' => {
+          'all' => { 'values' =>{ '0' => 'reset MAX demand', }, },
+        },
+      },
+    },
+  },
   'diagrams' => {
     'voltage_ln' => {
       'type' => 'GAUGE',
