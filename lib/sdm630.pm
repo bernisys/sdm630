@@ -564,7 +564,7 @@ sub retrieve_all {
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit,  50, 1, [
-        'Power_VA_demand_tot', 'Power_VA_demand_max',
+        'Power_VA_demand_tot', 'Power_VA_demand_max', # TODO: 'Current_demand_N', 'Curent_demand_Nmax',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 112, 1, [
