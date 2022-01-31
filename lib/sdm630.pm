@@ -615,6 +615,30 @@ my %GRAPHS = (
 
 
 
+sub retrieve_all_new {
+  my $ref_client = shift;
+  my $unit = shift;
+  my $type = shift;
+
+  $unit = 1 if !defined $unit;
+  $type = "SDM630" if !defined $type;
+
+  my $ref_values = {};
+
+  foreach my $register (sort keys %{$GRAPHS{'registers'}{'input'}}) {
+    my $ref_register = $GRAPHS{'registers'}{'input'}{$register};
+    printf("Reg. %5d: $30s (%s) [SDM630=%d, SDM72=%d]\n", 
+      $register,
+      $ref_register->{'parameter'},
+      $ref_register->{'desctiption'},
+      $ref_register->{'availability'}{'SDM630'},
+      $ref_register->{'availability'}{'SDM72'},
+    );
+  }
+
+  return $ref_values;
+}
+
 sub retrieve_all {
   my $ref_client = shift;
   my $unit = shift;
