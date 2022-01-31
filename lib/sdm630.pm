@@ -628,90 +628,111 @@ sub retrieve_all {
   if ($type eq "SDM630") {
     # retrieve all 3-phase reated values
     SDM630::retrieve($ref_client, $unit,   0, 3, [
+        # 30001       # 30007    # 30013    # 30019     # 30025      # 30031        # 30037
         'Voltage_LN', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor', 'phi'
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 117, 3, [
+        # 30235           # 30241
         'THD_Voltage_LN', 'THD_Current',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 129, 3, [
+        # 30259           # 30265
         'Current_demand', 'Current_demandmax',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 173, 3, [
+        # 30347              # 30353              # 30359             # 30365                # 30371                # 30377
         'Energy_kWh_Import', 'Energy_kWh_Export', 'Energy_kWh_Total', 'Energy_kVarh_Import', 'Energy_kVarh_Export', 'Energy_kVarh_Total',
       ], $ref_values);
 
     # add inter-phase voltages
     SDM630::retrieve($ref_client, $unit, 100, 1, [
+        # 30201            # 30203            # 30205            # 30207
         'Voltage_LL_L1L2', 'Voltage_LL_L2L3', 'Voltage_LL_L3L1', 'Voltage_LL_avg',
       ], $ref_values);
 
+
     # then add all single values (sums, averages, energies, ... not phase-related)
     SDM630::retrieve($ref_client, $unit,  21, 1, [
+        # 30043                  # 30047        # 30049                # 30053              # 30057
         'Voltage_LN_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        # 30061          # 30063                   # 30067           # 30071         # 30073                  # 30075                  # 30077                    # 30079
         'Power_Var_sum', 'PowerFactor_sum', '_32', 'phi_sum', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot', 'Energy_kVarh_Import_tot', 'Energy_kVarh_Export_tot',
+        # 30081                  # 30083      # 30085               # 30087
         'Energy_kVAh_Total_tot', 'Charge_Ah', 'Power_W_demand_tot', 'Power_W_demand_max',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit,  50, 1, [
+        # 30101                # 30103                        # 30105             # 30107
         'Power_VA_demand_tot', 'Power_VA_demand_max', # TODO: 'Current_demand_N', 'Curent_demand_Nmax',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 112, 1, [
+        # 30225
         'Current_N',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 124, 1, [
+        # 30249               # 30251
         'THD_Voltage_LN_avg', 'THD_Current_avg',
       ], $ref_values);
 
 # TODO: this value seems to be unknown by my SDM630 ...
 #    SDM630::retrieve($ref_client, $unit, 167, 1, [
+#        # 30335                # 30337                # 30339                # 30341
 #        'THD_Voltage_LL_L1L2', 'THD_Voltage_LL_L2L3', 'THD_Voltage_LL_L3L1', 'THD_Voltage_LL_avg',
 #      ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 171, 1, [
+        # 30343                 # 30345
         'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
       ], $ref_values);
 
   } elsif ($type eq "SDM72") {
     # retrieve all 3-phase reated values
     SDM630::retrieve($ref_client, $unit,   0, 3, [
+        # 30001       # 30007    # 30013    # 30019     # 30025      # 30031
         'Voltage_LN', 'Current', 'Power_W', 'Power_VA', 'Power_Var', 'PowerFactor',
       ], $ref_values);
 
     # then add all single values
     SDM630::retrieve($ref_client, $unit,  21, 1, [
+        # 30043                  # 30047        # 30049               # 30053               # 30057
         'Voltage_LN_avg', '_22', 'Current_avg', 'Current_sum', '_25', 'Power_W_sum', '_27', 'Power_VA_sum', '_29',
+        # 30061          # 30063                                 # 30071         # 30073                  # 30075
         'Power_Var_sum', 'PowerFactor_sum', '_32', '_33', '_34', 'Frequency_Hz', 'Energy_kWh_Import_tot', 'Energy_kWh_Export_tot',
       ], $ref_values);
+
     SDM630::retrieve($ref_client, $unit, 100, 1, [
+        # 30201            # 30203            # 30205            # 30207
         'Voltage_LL_L1L2', 'Voltage_LL_L2L3', 'Voltage_LL_L3L1', 'Voltage_LL_avg',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 112, 1, [
+        # 30225
         'Current_N',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 171, 1, [
+        # 30343                 # 30345
         'Energy_kWh_Total_tot', 'Energy_kVarh_Total_tot',
       ], $ref_values);
 
     # preiodical counters (resettable)
     SDM630::retrieve($ref_client, $unit, 192, 1, [
+        # 30385                            # 30389                    # 30391
         'Energy_kWh_periodic_tot', '_193', 'Energy_kWh_periodic_imp', 'Energy_kWh_periodic_exp',
       ], $ref_values);
 
     SDM630::retrieve($ref_client, $unit, 640, 1, [
-        'Power_W_imp',
-        'Power_W_exp',
+        # 31281        # 31283
+        'Power_W_imp', 'Power_W_exp',
       ], $ref_values);
 
   }
 
-#  189 L1 total kvarh (3) kvarh
   return $ref_values;
 }
 
