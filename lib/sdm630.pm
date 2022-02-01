@@ -1141,6 +1141,7 @@ sub generate_diagrams {
   my $subdir = shift;
   my $type = shift;
   my $name = shift;
+  my $draw_all = shift;
   my @which = @_;
 
   @which = sort keys %{$GRAPHS{'diagrams'}} if (! @which);
@@ -1175,7 +1176,6 @@ sub generate_diagrams {
         '--start', $ref_timespan->{'start'},
         '--width', $GRAPHS{'base'}{'width'},
         '--height', $GRAPHS{'base'}{'height'},
-        '--lazy',
         '--slope-mode',
         '--alt-autoscale',
         '--alt-y-grid',
@@ -1184,6 +1184,8 @@ sub generate_diagrams {
         '--force-rules-legend', # make sure all HRULE/VRULE are described in the legend, even if they are invisible due to graph scaling
         '--title', $ref_diagram->{'title'}.' ('.$ref_diagram->{'unit'}.') '.$name.' last '.$timespan,
       );
+
+      push @params,'--lazy' if (!defined $draw_all);
 
       push @params, ('--lower-limit', $ref_diagram->{'min'}) if exists ($ref_diagram->{'min'});
       push @params, ('--upper-limit', $ref_diagram->{'max'}) if exists ($ref_diagram->{'max'});
