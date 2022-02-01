@@ -237,7 +237,10 @@ my %GRAPHS = (
         { 'row' => 'avg', 'color' => $COLORS{'avg'}, 'style' => 'LINE1', 'data_range' => '0:270', 'minmax' => 'yes', },
       ],
       'lines' => [
-        { 'height' => 230, 'color' => $COLORS{'normal'} },
+        { 'height' => 230,   'color' => $COLORS{'normal'} },
+        { 'height' => 253,   'color' => '00a000' },
+        { 'height' => 207,   'color' => '00a000' },
+        { 'height' => 195.5, 'color' => 'e0e000' },
       ],
       'availability' => {
         'SDM72' => 1,
